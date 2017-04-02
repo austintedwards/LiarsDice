@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {ViewController} from 'ionic-angular';
+import { Gamedata } from '../../providers/gamedata';
 
 @Component({
   selector: 'new-game-page',
@@ -8,8 +9,17 @@ import {ViewController} from 'ionic-angular';
 })
 
 export class NewGamePage {
-  constructor(public viewCtrl: ViewController) {
+  phrase: any;
+  constructor(public viewCtrl: ViewController, public gamedata: Gamedata) {
   }
+  ionViewDidLoad(){
+    this.gamedata.newPhrase()
+    .then((data) => {
+      console.log(data)
+    this.phrase = data;
+  });
+}
+
 
 
 }

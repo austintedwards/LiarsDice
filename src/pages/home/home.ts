@@ -11,20 +11,15 @@ import { Gamedata } from '../../providers/gamedata';
 })
 export class HomePage {
 
-  constructor(public http: Http, public modalCtrl: ModalController, public gamedata:Gamedata) {
+  constructor(public http: Http, public modalCtrl: ModalController, public gamedata: Gamedata) {
 
   }
+  newGame() {
+    let modal = this.modalCtrl.create(NewGamePage);
+    modal.present()
+  }
 
-      newGame(){
-        let modal = this.modalCtrl.create(NewGamePage);
-        console.log(modal)
-        modal.present()
-
-        this.gamedata.newPhrase();
-
-      }
-
-  joinGame(){
+  joinGame() {
     console.log("yo");
   }
 
