@@ -10,15 +10,29 @@ import { Gamedata } from '../../providers/gamedata';
 
 export class NewGamePage {
   phrase: any;
+  player:any;
+
   constructor(public viewCtrl: ViewController, public gamedata: Gamedata) {
   }
+
   ionViewDidLoad(){
     this.gamedata.newPhrase()
     .then((data) => {
-      console.log(data)
     this.phrase = data;
   });
 }
+
+startGame(): void {
+    let game = {
+      phrase: this.phrase,
+      player: this.player,
+    };
+    console.log(game)
+    this.viewCtrl.dismiss(game);
+  }
+  close(): void {
+    this.viewCtrl.dismiss();
+  }
 
 
 

@@ -8,6 +8,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Gamedata } from '../providers/gamedata';
+import { JoinGamePage } from '../pages/joingame/joingame';
 
 
 @NgModule({
@@ -16,7 +17,9 @@ import { Gamedata } from '../providers/gamedata';
     AboutPage,
     HomePage,
     TabsPage,
-    NewGamePage
+    NewGamePage,
+    JoinGamePage
+
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -27,7 +30,8 @@ import { Gamedata } from '../providers/gamedata';
     AboutPage,
     HomePage,
     TabsPage,
-    NewGamePage
+    NewGamePage,
+    JoinGamePage
   ],
   providers: [
     StatusBar,
