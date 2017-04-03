@@ -41,11 +41,9 @@ export class Gamedata {
 
 addPlayer(game){
     console.log("game", game)
-  let headers = new Headers();
-  headers.append('Content-Type', 'application/json');
-  this.http.put('http://localhost:8080/api/game/'+game.phrase, JSON.stringify(game), {headers: headers})
+  this.http.put('http://localhost:8080/api/game/'+game.phrase, JSON.stringify(game))
     .subscribe(res => {
-      console.log(res.json());
+      console.log("input",res);
     });
 }
 

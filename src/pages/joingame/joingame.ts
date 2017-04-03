@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 import {ViewController} from 'ionic-angular';
 
 /*
@@ -17,7 +16,7 @@ export class JoinGamePage {
   player:any;
   phrase:any;
 
-  constructor(public viewCtrl: ViewController, public navParams: NavParams) {}
+  constructor(public viewCtrl: ViewController) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad JoingamePage');
@@ -28,7 +27,6 @@ export class JoinGamePage {
         phrase: this.phrase,
         player: this.player,
       };
-      console.log(game)
       this.viewCtrl.dismiss(game);
     }
     close(): void {

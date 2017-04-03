@@ -29,6 +29,7 @@ export class HomePage {
     let modal = this.modalCtrl.create(JoinGamePage);
     modal.onDidDismiss(game => {
       if(game){
+        console.log("join game", game)
         this.gamedata.addPlayer(game);
       }
     });

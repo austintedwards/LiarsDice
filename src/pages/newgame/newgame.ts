@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 import {ViewController} from 'ionic-angular';
 import { Gamedata } from '../../providers/gamedata';
 
@@ -27,7 +26,6 @@ startGame(): void {
       phrase: this.phrase,
       player: this.player,
     };
-    console.log(game)
     this.viewCtrl.dismiss(game);
   }
   close(): void {
