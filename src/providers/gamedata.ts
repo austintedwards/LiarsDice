@@ -29,24 +29,29 @@ export class Gamedata {
   }
 
   createGame(game){
-    console.log("game", game)
   let headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
   this.http.post('http://localhost:8080/api/game', JSON.stringify(game), {headers: headers})
     .subscribe(res => {
-      console.log(res.json());
     });
 }
 
 addPlayer(game){
-    console.log("game", game)
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     this.http.put('http://localhost:8080/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
     .subscribe(res => {
-      console.log("input", res);
     });
+}
+
+getPhrase(phrase){
+  this.http.get('http://localhost:8080/api/game/'+phrase)
+  .subscribe((data)=>{
+    console.log("data",data)
+  })
+
+
 }
 
 

@@ -32,7 +32,7 @@ startGame(): void {
     };
 
     let alert = this.alertCtrl.create({
-      subTitle: 'Please Input Player Name!',
+      subTitle: 'Please Input Player Name',
       buttons: ['OK']
     });
 
@@ -41,7 +41,6 @@ startGame(): void {
     this.appCtrl.getRootNav().push(GamePlayPage);
     }else{
       alert.present();
-
     }
   }
   close(): void {
