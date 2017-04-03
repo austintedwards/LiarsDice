@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Gamedata } from '../providers/gamedata';
 import { JoinGamePage } from '../pages/joingame/joingame';
+import { GamePlayPage } from '../pages/gameplay/gameplay';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { JoinGamePage } from '../pages/joingame/joingame';
     HomePage,
     TabsPage,
     NewGamePage,
-    JoinGamePage
+    JoinGamePage,
+    GamePlayPage
 
   ],
   imports: [
@@ -31,7 +33,8 @@ import { JoinGamePage } from '../pages/joingame/joingame';
     HomePage,
     TabsPage,
     NewGamePage,
-    JoinGamePage
+    JoinGamePage,
+    GamePlayPage
   ],
   providers: [
     StatusBar,
