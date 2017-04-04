@@ -11,7 +11,6 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Gamedata {
   data:any;
-
   constructor(public http: Http) {
     this.data=null;
     console.log('Hello Gamedata Provider');
@@ -29,10 +28,11 @@ export class Gamedata {
   }
 
   createGame(game){
+    console.log(this)
   let headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
-  this.http.post('http://localhost:8080/api/game', JSON.stringify(game), {headers: headers})
+  this.http.post('https://diceliar.herokuapp.com/v1/api/game', JSON.stringify(game), {headers: headers})
     .subscribe(res => {
     });
 }
@@ -40,17 +40,19 @@ export class Gamedata {
 addPlayer(game){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    this.http.put('http://localhost:8080/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
+    this.http.put('https://diceliar.herokuapp.com/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
     .subscribe(res => {
     });
 }
 
 getPhrase(phrase){
-  this.http.get('http://localhost:8080/api/game/'+phrase)
+  return new Promise(resolve=>{
+  this.http.get('https://diceliar.herokuapp.com/api/game/'+phrase)
   .subscribe((data)=>{
-    console.log("data",data)
+    this.data=data.json().passphrase
+    resolve(this.data)
   })
-
+})
 
 }
 

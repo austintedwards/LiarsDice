@@ -43,9 +43,10 @@ startGame(): void {
       alert.present();
     }
   }
-  close(): void {
+close(): void {
     this.viewCtrl.dismiss();
   }
+
 
 
 

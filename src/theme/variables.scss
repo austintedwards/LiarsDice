@@ -4,6 +4,9 @@ $font-path: "../assets/fonts";
 
 @import "ionic.globals";
 
+$modal-inset-width: 500px;
+
+$modal-inset-height: 500px;
 
 // Shared Variables
 // --------------------------------------------------
@@ -30,7 +33,7 @@ $colors: (
   light:      #f4f4f4,
   dark:       #222
 );
-$background-color:  #fffded;
+$background-color:  #ffe8c4;
 
 
 

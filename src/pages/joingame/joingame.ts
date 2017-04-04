@@ -17,7 +17,7 @@ export class JoinGamePage {
 
   player:any;
   phrase:any;
-
+  play:any;
   constructor(
     public viewCtrl: ViewController,
     public gamedata: Gamedata,
@@ -26,6 +26,7 @@ export class JoinGamePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad JoingamePage');
+
   }
 
   joinStartGame(): void {
@@ -33,6 +34,7 @@ export class JoinGamePage {
         phrase: this.phrase,
         player: this.player,
       };
+
       let alert1 = this.alertCtrl.create({
         subTitle: 'Please Input Player Name & Passphrase',
         buttons: ['OK']
@@ -45,7 +47,15 @@ export class JoinGamePage {
         subTitle: 'Please Input Player Name',
         buttons: ['OK']
       });
+
       this.gamedata.getPhrase(this.phrase)
+        .then((data) => {
+          this.play = data;
+        });
+
+        console.log("this",this)
+        console.log("this.play", this.play)
+
     if (this.player && this.phrase){
       this.viewCtrl.dismiss(game);
       this.appCtrl.getRootNav().push(GamePlayPage);
@@ -56,9 +66,13 @@ export class JoinGamePage {
       }else{
         alert1.present();
       }
+
     }
     close(): void {
       this.viewCtrl.dismiss();
     }
+
+
+
 
 }
