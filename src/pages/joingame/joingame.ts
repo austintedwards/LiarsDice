@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {App, ViewController, AlertController} from 'ionic-angular';
 import { Gamedata } from '../../providers/gamedata';
-import { GamePlayPage } from '../gameplay/gameplay';
+import { LoadingPage } from '../loading/loading';
 
 /*
   Generated class for the Joingame page.
@@ -15,14 +15,17 @@ import { GamePlayPage } from '../gameplay/gameplay';
 })
 export class JoinGamePage {
 
-  player:any;
-  phrase:any;
+  player: any;
+  phrase: any;
+  game: any;
   play:any;
+  players:any;
+
   constructor(
     public viewCtrl: ViewController,
     public gamedata: Gamedata,
     public appCtrl: App,
-    public alertCtrl: AlertController) {}
+    public alertCtrl: AlertController) { }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad JoingamePage');
@@ -30,47 +33,62 @@ export class JoinGamePage {
   }
 
   joinStartGame(): void {
-      let game = {
-        phrase: this.phrase,
-        player: this.player,
-      };
+    let game = {
+      phrase: this.phrase,
+      player: this.player,
+    };
 
-      let alert1 = this.alertCtrl.create({
-        subTitle: 'Please Input Player Name & Passphrase',
-        buttons: ['OK']
-      });
-      let alert2 = this.alertCtrl.create({
-        subTitle: 'Please Input Passphrase',
-        buttons: ['OK']
-      });
-      let alert3 = this.alertCtrl.create({
-        subTitle: 'Please Input Player Name',
-        buttons: ['OK']
-      });
-
-      this.gamedata.getPhrase(this.phrase)
+    let alert1 = this.alertCtrl.create({
+      subTitle: 'Please Input Player Name & Passphrase',
+      buttons: ['OK']
+    });
+    let alert2 = this.alertCtrl.create({
+      subTitle: 'Please Input Passphrase',
+      buttons: ['OK']
+    });
+    let alert3 = this.alertCtrl.create({
+      subTitle: 'Please Input Player Name',
+      buttons: ['OK']
+    });
+    let alert4 = this.alertCtrl.create({
+      subTitle: 'Passphrase does not exist',
+      buttons: ['OK']
+    });
+    let alert5 = this.alertCtrl.create({
+      subTitle: 'Game is full',
+      buttons: ['OK']
+    });
+    if (this.phrase) {
+      this.gamedata.getGame(this.phrase)
         .then((data) => {
-          this.play = data;
+          this.game = data;
+          this.play=this.game.passphrase
+          if (this.play !=="not working"){
+            this.players = this.game.players.length
+          }
+          console.log(this.players)
+          if (this.player && this.phrase && this.play !== "not working" && this.players<4) {
+            this.viewCtrl.dismiss(game);
+            this.appCtrl.getRootNav().push(LoadingPage);
+          } else if (this.player && this.phrase && this.play === "not working") {
+            alert4.present();
+          } else if (this.players>=4){
+            alert5.present();
+          } else if (this.phrase) {
+            alert3.present();
+          } else {
+            alert1.present();
+          }
         });
-
-        console.log("this",this)
-        console.log("this.play", this.play)
-
-    if (this.player && this.phrase){
-      this.viewCtrl.dismiss(game);
-      this.appCtrl.getRootNav().push(GamePlayPage);
-      }else if (this.player){
-        alert2.present();
-      }else if (this.phrase){
-        alert3.present();
-      }else{
-        alert1.present();
-      }
-
+    } else if (this.player) {
+      alert2.present();
+    }else {
+      alert1.present();
     }
-    close(): void {
-      this.viewCtrl.dismiss();
-    }
+  }
+  close(): void {
+    this.viewCtrl.dismiss();
+  }
 
 
 

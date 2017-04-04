@@ -12,7 +12,6 @@ import 'rxjs/add/operator/map';
 export class Gamedata {
   data:any;
   constructor(public http: Http) {
-    this.data=null;
     console.log('Hello Gamedata Provider');
   }
 
@@ -45,11 +44,11 @@ addPlayer(game){
     });
 }
 
-getPhrase(phrase){
+getGame(phrase){
   return new Promise(resolve=>{
-  this.http.get('https://diceliar.herokuapp.com/api/game/'+phrase)
+  this.http.get('https://diceliar.herokuapp.com/v1/api/game/'+phrase)
   .subscribe((data)=>{
-    this.data=data.json().passphrase
+    this.data=data.json()
     resolve(this.data)
   })
 })

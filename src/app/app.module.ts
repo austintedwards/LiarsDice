@@ -10,6 +10,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Gamedata } from '../providers/gamedata';
 import { JoinGamePage } from '../pages/joingame/joingame';
 import { GamePlayPage } from '../pages/gameplay/gameplay';
+import { LoadingPage } from '../pages/loading/loading';
+
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { GamePlayPage } from '../pages/gameplay/gameplay';
     TabsPage,
     NewGamePage,
     JoinGamePage,
-    GamePlayPage
+    GamePlayPage,
+    LoadingPage
 
   ],
   imports: [
@@ -34,7 +37,8 @@ import { GamePlayPage } from '../pages/gameplay/gameplay';
     TabsPage,
     NewGamePage,
     JoinGamePage,
-    GamePlayPage
+    GamePlayPage,
+    LoadingPage
   ],
   providers: [
     StatusBar,
