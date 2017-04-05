@@ -27,11 +27,10 @@ export class Gamedata {
   }
 
   createGame(game){
-    console.log(this)
   let headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
-  this.http.post('https://diceliar.herokuapp.com/v1/api/game', JSON.stringify(game), {headers: headers})
+  this.http.post('http://localhost:5000/v1/api/game', JSON.stringify(game), {headers: headers})
     .subscribe(res => {
     });
 }
@@ -39,14 +38,24 @@ export class Gamedata {
 addPlayer(game){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    this.http.put('https://diceliar.herokuapp.com/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
+    this.http.put('http://localhost:5000/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
     .subscribe(res => {
     });
 }
 
 getGame(phrase){
   return new Promise(resolve=>{
-  this.http.get('https://diceliar.herokuapp.com/v1/api/game/'+phrase)
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase)
+  .subscribe((data)=>{
+    this.data=data.json()
+    resolve(this.data)
+  })
+})
+}
+
+getPlayers(phrase){
+  return new Promise(resolve=>{
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase)
   .subscribe((data)=>{
     this.data=data.json()
     resolve(this.data)

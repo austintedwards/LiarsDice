@@ -12,7 +12,10 @@ import { JoinGamePage } from '../joingame/joingame';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  constructor(public http: Http, public modalCtrl: ModalController, public gamedata: Gamedata) {
+  constructor(
+    public http: Http,
+    public modalCtrl: ModalController,
+    public gamedata: Gamedata) {
 
   }
   newGame() {

@@ -1,5 +1,5 @@
 <!--
-  Generated template for the Loading page.
+  Generated template for the Newgame page.
 
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
@@ -14,6 +14,17 @@
 
 
 <ion-content padding>
-  
+  <ion-card *ngFor="let player of players">
+    <ion-card-header>
+      Player: {{player.name}}
+    </ion-card-header>
+    <ion-card-content>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-item>
+  </ion-item>
+  <button ion-button color="light" round (click)="beginningGame()">Start Game</button>
 
 </ion-content>

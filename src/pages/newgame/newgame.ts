@@ -38,7 +38,7 @@ startGame(): void {
 
     if (this.player){
     this.viewCtrl.dismiss(game);
-    this.appCtrl.getRootNav().push(LoadingPage);
+    this.appCtrl.getRootNav().push(LoadingPage,{phrase:this.phrase});
     }else{
       alert.present();
     }
