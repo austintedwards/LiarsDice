@@ -43,6 +43,14 @@ addPlayer(game){
     });
 }
 
+addRoll(game){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    this.http.put('http://localhost:5000/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
+    .subscribe(res => {
+    });
+}
+
 getGame(phrase){
   return new Promise(resolve=>{
   this.http.get('http://localhost:5000/v1/api/game/'+phrase)

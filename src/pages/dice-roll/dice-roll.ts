@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Gamedata } from '../../providers/gamedata';
 
 /*
   Generated class for the Gameplay page.
@@ -8,13 +9,17 @@ import { NavController, NavParams } from 'ionic-angular';
   Ionic pages and navigation.
 */
 @Component({
-  selector: 'page-gameplay',
-  templateUrl: 'gameplay.html'
+  selector: 'page-dice-roll',
+  templateUrl: 'dice-roll.html'
 })
-export class GamePlayPage {
+export class DiceRollPage {
   game:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public gamedata:Gamedata,
+    ) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad GameplayPage');
@@ -27,8 +32,13 @@ export class GamePlayPage {
     for (var i =0; i<5; i++){
       dice.push(Math.floor(Math.random()*6)+1)
     }
-    console.log(dice)
-    console.log(this)
+    let playerRoll = {
+      phrase: this.game.passphrase,
+      roll: dice
+    };
+    this.gamedata.addRoll(playerRoll)
+    console.log(playerRoll)
   }
+
 
 }

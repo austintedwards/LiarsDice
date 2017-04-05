@@ -68,7 +68,7 @@ export class JoinGamePage {
           }
           if (this.player && this.phrase && this.play !== "not working" && this.players<4) {
             this.viewCtrl.dismiss(game);
-            this.appCtrl.getRootNav().push(LoadingPage,{phrase:this.phrase, playnum:this.players+1});
+            this.appCtrl.getRootNav().push(LoadingPage,{phrase:this.phrase, player:this.player, playnum:this.players});
           } else if (this.player && this.phrase && this.play === "not working") {
             alert4.present();
           } else if (this.players>=4){
