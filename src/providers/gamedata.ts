@@ -69,8 +69,19 @@ getPlayers(phrase){
     resolve(this.data)
   })
 })
-
 }
+
+getDice(phrase){
+  return new Promise(resolve=>{
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase)
+  .subscribe((data)=>{
+    this.data=data.json()
+    resolve(this.data)
+  })
+})
+}
+
+
 
 
 }

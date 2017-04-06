@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { App, NavController, NavParams } from 'ionic-angular';
 import { Gamedata } from '../../providers/gamedata';
+import { GamePlayPage } from '../gameplay/gameplay';
+import * as io from 'socket.io-client';
 
 /*
   Generated class for the Gameplay page.
@@ -14,17 +16,19 @@ import { Gamedata } from '../../providers/gamedata';
 })
 export class DiceRollPage {
   game:any;
+  player:any;
+  socket:any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public gamedata:Gamedata,
+    public appCtrl: App
     ) {}
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GameplayPage');
     this.game = this.navParams.data.game
-    console.log(this.game)
+    this.player = this.navParams.data.player
   }
 
   rollDice(){
@@ -37,7 +41,8 @@ export class DiceRollPage {
       roll: dice
     };
     this.gamedata.addRoll(playerRoll)
-    console.log(playerRoll)
+    this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:playerRoll.phrase});
+
   }
 
 

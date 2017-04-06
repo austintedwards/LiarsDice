@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { App, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Gamedata } from '../../providers/gamedata';
-// import * as io from 'socket.io-client';
+import * as io from 'socket.io-client';
 import { DiceRollPage } from '../dice-roll/dice-roll';
 
 /*
@@ -20,6 +20,8 @@ export class LoadingPage {
   phrase: any;
   socket:any;
   player:any;
+  screenplay=[];
+  play:any;
 
   constructor(
     public navCtrl: NavController,
@@ -28,16 +30,24 @@ export class LoadingPage {
     public appCtrl: App,
     public alertCtrl: AlertController
   ) {
-    // this.socket = io('http://localhost:5000');
-    // this.socket.on('player',(players)=>{
-    //   console.log('player',players)
-    // })
+    this.socket = io('http://localhost:5001');
+    this.socket.on('message',(players)=>{
+      console.log('players',players)
+      this.ionViewDidLoad()
+    })
+
+    this.socket.on('start game',(play)=>{
+      console.log('play this',play)
+      this.play = play;
+      this.beginGame()
+    })
   }
 
   ionViewDidLoad() {
-      var phrase = this.navParams.data.phrase
+      this.player = this.navParams.data.player
+      this.phrase = this.navParams.data.phrase
       var playnum = this.navParams.data.playnum
-      this.gamedata.getPlayers(phrase)
+      this.gamedata.getPlayers(this.phrase)
       .then((data) => {
       this.game = data;
       this.players = this.game.players;
@@ -46,12 +56,13 @@ export class LoadingPage {
         }
       if(this.game.passphrase==="not working" || playerLength===playnum){
         this.ionViewDidLoad()
+        this.socket.emit('message', {player:this.player, page:this.phrase});
+
       }
     });
   }
 
   beginGame(){
-    this.player = this.navParams.data.player
     let alert1 = this.alertCtrl.create({
       subTitle: 'Please wait for other players to join.',
       buttons: ['OK']
@@ -60,9 +71,14 @@ export class LoadingPage {
     var otherPlayers = this.game.players.length
     if (otherPlayers>1){
       this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player});
+      if (!this.play){
+        console.log("get it ")
+        this.socket.emit('start game', {play:"play", page:this.phrase});
+      }
     }else{
       alert1.present();
     }
+
   }
 
 }
