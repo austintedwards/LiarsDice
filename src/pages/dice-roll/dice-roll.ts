@@ -18,17 +18,33 @@ export class DiceRollPage {
   game:any;
   player:any;
   socket:any;
+  phrase: any;
+  totalDice:any;
+  groupSize: any;
+  playersRolled:any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public gamedata:Gamedata,
     public appCtrl: App
-    ) {}
+    ) {
+      this.socket = io('http://localhost:5001');
+      this.socket.on('dice roll', () => {
+        this.playersRolled++
+        console.log(this.playersRolled, this.groupSize)
+        console.log("dice rolled")
+        // this.play = play;
+      })
+
+    }
 
   ionViewDidLoad() {
     this.game = this.navParams.data.game
     this.player = this.navParams.data.player
+    this.groupSize= this.navParams.data.groupNum
+    this.playersRolled = 0
+    console.log(this.groupSize)
   }
 
   rollDice(){
@@ -41,7 +57,9 @@ export class DiceRollPage {
       roll: dice
     };
     this.gamedata.addRoll(playerRoll)
-    this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:playerRoll.phrase});
+    this.phrase = playerRoll.phrase
+    this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase});
+    this.socket.emit('dice roll', { page: this.phrase});
 
   }
 

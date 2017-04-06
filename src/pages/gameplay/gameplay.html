@@ -11,28 +11,30 @@
     <ion-card *ngFor="let di of dice">
       {{di}}
     </ion-card>
+    <ion-content [ngSwitch] = "playerUp">
+      <ion-item *ngSwitchCase = "playernum">
     <ion-item>
       <button ion-button color="secondary" block >
         Make Bid
       </button>
     </ion-item>
     <ion-item>
-  <button ion-button color="secondary" round (click)="testing(1)">
+  <button ion-button color="secondary" round (click)="makeBid(1)">
     1
   </button>
-  <button ion-button color="secondary" round (click)="testing(2)">
+  <button ion-button color="secondary" round (click)="makeBid(2)">
     2
   </button>
-  <button ion-button color="secondary" round (click)="testing(3)">
+  <button ion-button color="secondary" round (click)="makeBid(3)">
     3
   </button>
-  <button ion-button color="secondary" round (click)="testing(4)">
+  <button ion-button color="secondary" round (click)="makeBid(4)">
     4
   </button>
-  <button ion-button color="secondary" round (click)="testing(5)">
+  <button ion-button color="secondary" round (click)="makeBid(5)">
     5
   </button>
-  <button ion-button color="secondary" round (click)="testing(6)">
+  <button ion-button color="secondary" round (click)="makeBid(6)">
     6
   </button>
 </ion-item>
@@ -41,5 +43,11 @@
         Bullshit
       </button>
     </ion-item>
+  </ion-item>
+  <ion-card-header *ngSwitchDefault>
+    It is {{playerNameUp}}'s turn.
+  </ion-card-header>
+
+  </ion-content>
 
 </ion-content>
