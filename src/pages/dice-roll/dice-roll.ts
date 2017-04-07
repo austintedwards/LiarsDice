@@ -22,6 +22,7 @@ export class DiceRollPage {
   totalDice:any;
   groupSize: any;
   playersRolled:any;
+  dicecheck: any;
 
   constructor(
     public navCtrl: NavController,
@@ -30,7 +31,12 @@ export class DiceRollPage {
     public appCtrl: App
     ) {
       this.socket = io('http://localhost:5001');
-  
+      this.socket.on('dice roll', (dicecheck) => {
+        this.playersRolled++
+        this.dicecheck = dicecheck
+        console.log(this.dicecheck)
+        // this.play = play;
+      })
 
     }
 
@@ -54,7 +60,7 @@ export class DiceRollPage {
     .then((data)=>{
       this.game=data
       this.phrase = playerRoll.phrase
-      this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase});
+      this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase, dicecheck:this.dicecheck});
       this.socket.emit('dice roll', { page: this.phrase, totalDice: this.game.totalDice});
     })
 

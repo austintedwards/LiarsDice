@@ -4,20 +4,20 @@
     font-family: 'Righteous', cursive;
     font-size: 100%;
     text-align: center;
-    ion-item {
+    .backgroundInput{
       border-radius: 50px;
       padding: 2.5%;
       background-color: #ffe8c4 !important;
     }
 
-    ion-input, ion-select, ion-textarea {
+    .inputHere{
       background-color: #f2f2f2;
       padding: 5px 10px;
       font-size: 150%;
       border-radius: 50px;
 
     }
-    ion-card{
+    .phraseCard{
       border-radius: 50px;
       background-color: #c4d6b0;
       margin-top: 20%;

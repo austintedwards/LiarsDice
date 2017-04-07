@@ -35,6 +35,7 @@ export class GamePlayPage {
   playerMarks:any;
   play:any;
   dicecheck:any;
+  data:any;
 
   constructor(
     public navCtrl: NavController,
@@ -75,6 +76,12 @@ export class GamePlayPage {
     this.phrase = this.navParams.data.phrase
     this.gamedata.getGame(this.phrase)
     .then((data)=>{
+      this.data = data
+      if (this.playernum===1){
+        if(this.data.totalDice.length>0){
+          this.dicecheck=this.data.totalDice
+        }
+      }
     })
     //may need to change this!
     this.game = this.navParams.data.game
@@ -87,7 +94,8 @@ export class GamePlayPage {
         this.playernum = this.players[i].playerNum
       }
     }
-    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum });
+
+    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum});
     this.playerUp = 1
     this.playerShow(this.playerUp)
   }
@@ -155,6 +163,7 @@ export class GamePlayPage {
       .then((data) => {
         this.totalDice = data;
         let totalDice = this.totalDice.totalDice[0];
+        this.dicecheck=totalDice;
         let quanity = Number(bid.quanity)
         let check = 0
         if (totalDice) {
@@ -176,7 +185,7 @@ export class GamePlayPage {
           this.playerShow(this.playerUp)
         } else {
           let noBid = this.alertCtrl.create({
-            subTitle: 'Wait for All Players to Roll Dice.',
+            subTitle: 'this is it',
             buttons: ['OK']
           });
           noBid.present();
