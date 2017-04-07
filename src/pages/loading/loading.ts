@@ -57,7 +57,6 @@ export class LoadingPage {
       if(this.game.passphrase==="not working" || playerLength===playnum){
         this.ionViewDidLoad()
         this.socket.emit('message', {player:this.player, page:this.phrase});
-
       }
     });
   }

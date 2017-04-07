@@ -15,21 +15,18 @@
 
 <ion-content padding>
   <ion-card >
-    <ion-card-header>
+    <ion-card-header class = "phrasecard">
       Passphrase: {{phrase}}
     </ion-card-header>
   </ion-card>
   <ion-card *ngFor="let player of players">
-    <ion-card-header>
+    <ion-card-header class = "playername{{player.playerNum}}">
       Player: {{player.name}}
     </ion-card-header>
     <ion-card-content>
     </ion-card-content>
   </ion-card>
 
-
-  <ion-item>
-  </ion-item>
-  <button ion-button color="light" round (click)="beginGame()">Start Game</button>
+  <button class="start" ion-button color="light" round (click)="beginGame()">Start Game</button>
 
 </ion-content>

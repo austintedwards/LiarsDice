@@ -1,20 +1,27 @@
-.ios, .md {
+.inputitem{
+  font-family: 'Righteous', cursive;
+  font-size: 100%;
+  text-align: center;
+  border-radius: 50px;
+  padding: 3%;
+  background-color: #ffe8c4 !important;
+  margin-top: 15%;
+}
 
-  join-game-page {
+.joininput{
+  background-color: #f2f2f2;
+  padding: 10px 10px;
+  font-size: 150%;
+  border-radius: 50px;
 
-    ion-label {
-      margin-left: 10px;
-    }
+}
 
-    ion-item {
-      background-color: #ffe8c4 !important;
-    }
-
-    ion-input, ion-select, ion-textarea {
-      background-color: #f2f2f2;
-      padding: 5px 10px;
-    }
-
-  }
-
+.joinbutton{
+  border-radius: 50px;
+  background-color: #a34f4e;
+  margin-left: 25%;
+  margin-top: 25%;
+  font-family: 'Righteous', cursive;
+  font-size: 200%;
+  text-align: center;
 }

@@ -15,17 +15,15 @@
 
 <ion-content padding>
   <ion-card>
-    <ion-card-header>
+    <ion-card-header class = "phrasecard">
       Passphrase: {{phrase}}
     </ion-card-header>
-    <ion-card-content>
-    </ion-card-content>
   </ion-card>
 
 
   <ion-item>
     <ion-input type="text" placeholder="Input Name" [(ngModel)]= "player"></ion-input>
   </ion-item>
-  <button ion-button color="dark" round (click)="startGame()">Create Game</button>
+  <button ion-button class= "create" round (click)="startGame()">Create Game</button>
 
 </ion-content>

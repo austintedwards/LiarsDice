@@ -1,20 +1,22 @@
-.ios, .md {
+.title{
+  text-align: center;
+  color: #ffe8c4;
+  font-family: 'Righteous', cursive;
+  font-size: 750%;
+}
+.buttons{
+  display: block;
+  margin-left: auto;
+  margin-right: auto ;
+  margin-top: 10%;
+  padding: 15%;
+  font-family: 'Righteous', cursive;
+  font-size: 200%;
+}
+.new{
+  background-color: #c4d6b0;
+}
 
-  home-page {
-
-    ion-item {
-      background-color: #fff;
-      border-bottom: none !important;
-    }
-
-    ion-label {
-      white-space: normal;
-    }
-
-    ion-item-sliding {
-      margin: 20px;
-    }
-
-  }
-
+.join{
+  background-color: #a34f4e;
 }

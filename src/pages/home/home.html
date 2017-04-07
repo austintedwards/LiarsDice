@@ -1,18 +1,12 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>Game</ion-title>
-  </ion-navbar>
-</ion-header>
+
+
 <ion-content padding>
-  <h2>Liars Dice</h2>
-<ion-item>
-  <button ion-button color="secondary" clear (click)="newGame()">
+  <h2 class = "title">Liar's Dice</h2>
+  <button class = "new buttons" ion-button color="secondary" round (click)="newGame()">
     New Game
   </button>
-</ion-item>
-<ion-item>
-  <button ion-button color="danger" clear (click)="joinGame()">
+  <button class = "join buttons" ion-button color="danger" round (click)="joinGame()">
     Join Game
   </button>
-</ion-item>
+
 </ion-content>

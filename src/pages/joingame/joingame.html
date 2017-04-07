@@ -14,12 +14,12 @@
 
 
 <ion-content padding>
-  <ion-item>
-    <ion-input type="text" placeholder="Input Game Passphrase" [(ngModel)]= "phrase"></ion-input>
+  <ion-item class = "inputitem">
+    <ion-input class = "joininput" type="text" placeholder="Input Game Passphrase" [(ngModel)]= "phrase"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-input type="text" placeholder="Input Name" [(ngModel)]= "player"></ion-input>
+  <ion-item class="inputitem">
+    <ion-input class = "joininput" type="text" placeholder="Input Name" [(ngModel)]= "player"></ion-input>
   </ion-item>
-  <button ion-button color="dark" round (click)="joinStartGame()">Join Game</button>
+  <button class= "joinbutton" ion-button round (click)="joinStartGame()">Join Game</button>
 
 </ion-content>
