@@ -30,6 +30,8 @@ export class GamePlayPage {
   playerName: any;
   playerNameUp: any;
   bidResult:any;
+  markYou: any;
+  playerMarks:any;
 
   constructor(
     public navCtrl: NavController,
@@ -42,11 +44,26 @@ export class GamePlayPage {
       console.log('play this', bid, playerBid)
       // this.play = play;
       this.bid = bid
+      this.playerBid = playerBid
       this.checkBid(bid, playerBid)
+    })
+    this.socket.on('you marked', (playerNum) => {
+      console.log('play this', playerNum)
+      if (this.playernum ===playerNum){
+      this.gamedata.giveMark(this.game,this.phrase,playerNum)
+      .then((data)=>{
+        this.game = data
+        this.playerMarks = this.game.players[playerNum-1].marks
+        this.markYou = true;
+      })
+    }
+      // this.play = play;
+
     })
   }
 
   ionViewDidLoad() {
+    this.markYou=false;
     console.log("onthispage")
     this.phrase = this.navParams.data.phrase
     this.gamedata.getGame(this.phrase)
@@ -172,15 +189,36 @@ export class GamePlayPage {
 
   }
 
-
-
-
   bullShit() {
     console.log("bullshit")
     if (!this.bidResult){
       console.log("DIS BULLSHIT")
+      console.log(this.bid, "playerbid", this.playerBid)
+      let mark = this.playerBid
+      this.socket.emit('you marked', { page: this.phrase, playerNum: mark });
+       console.log("mark", mark, "game", this.game)
     }else{
       console.log("you got a mark")
+      console.log(this.bid, "playerbid", this.playerBid)
+      if (this.playerBid<this.players.length){
+        let mark = this.playerBid + 1
+        this.gamedata.giveMark(this.game,this.phrase,mark)
+        .then((data)=>{
+          this.game = data
+          this.playerMarks = this.game.players[mark-1].marks
+          this.markYou = true;
+        })
+      }else{
+        let mark = 1
+        this.gamedata.giveMark(this.game,this.phrase,mark)
+        .then((data)=>{
+          this.game = data
+          this.playerMarks = this.game.players[mark-1].marks
+          this.markYou = true;
+        })
+
+      }
+
     }
   }
 

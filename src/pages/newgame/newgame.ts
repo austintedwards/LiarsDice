@@ -35,11 +35,17 @@ startGame(): void {
       subTitle: 'Please Input Player Name',
       buttons: ['OK']
     });
+    let phraseAlert = this.alertCtrl.create({
+      subTitle: 'Wait for passphrase',
+      buttons: ['OK']
+    });
 
-    if (this.player){
+    if (this.player&&this.phrase){
     this.viewCtrl.dismiss(game);
     this.appCtrl.getRootNav().push(LoadingPage,{phrase:this.phrase, player:this.player});
-    }else{
+  }else if(!this.phrase){
+    phraseAlert.present();
+  }else{
       alert.present();
     }
   }

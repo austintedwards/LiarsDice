@@ -11,6 +11,9 @@
     <ion-card class = "di" *ngFor="let di of dice">
       {{di}}
     </ion-card>
+    <ion-card *ngIf = "bid" class ="bidgiven">
+      Bid was {{bid.quanity}}  {{bid.di}}'s
+    </ion-card>
     <ion-content [ngSwitch] = "playerUp">
       <ion-item  *ngSwitchCase = "playernum">
       <button class = "bidcard" ion-button block >
@@ -34,13 +37,16 @@
   <button class = "bid"  ion-button  round (click)="makeBid(6)">
     6
   </button>
-      <button class ="bullshit" ion-button block (click)="bullShit()">
+      <button *ngIf = "bid" color = "danger" class ="bullshit" ion-button block (click)="bullShit()">
         Bullshit
       </button>
   </ion-item>
-  <ion-card-header *ngSwitchDefault class="player{{playernum}}">
+  <ion-card-header *ngSwitchDefault class="player{{playerUp}}">
     It is {{playerNameUp}}'s turn.
   </ion-card-header>
+  <ion-card *ngIf = "markYou" class ="markYou">
+    You have {{playerMarks}} marks
+  </ion-card>
 
   </ion-content>
 

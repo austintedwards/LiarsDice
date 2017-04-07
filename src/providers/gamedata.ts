@@ -81,6 +81,28 @@ getDice(phrase){
 })
 }
 
+giveMark(game,phrase,mark){
+  return new Promise(resolve=>{
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    this.http.put('http://localhost:5000/v1/api/game/'+phrase+"/"+mark, JSON.stringify(game),{headers: headers})
+    .subscribe((data)=>{
+      this.data=data.json()
+      resolve(this.data)
+    })
+    })
+}
+
+getMark(phrase, playerNum){
+  return new Promise(resolve=>{
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase+"/"+playerNum)
+  .subscribe((data)=>{
+    this.data=data.json()
+    resolve(this.data)
+  })
+})
+}
 
 
 
