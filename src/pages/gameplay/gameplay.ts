@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, App, AlertController } from 'ionic-angular';
 import * as io from 'socket.io-client';
 import { Gamedata } from '../../providers/gamedata';
+import { DiceRollPage } from '../dice-roll/dice-roll';
 
 /*
   Generated class for the Gameplay page.
@@ -32,6 +33,7 @@ export class GamePlayPage {
   bidResult:any;
   markYou: any;
   playerMarks:any;
+  play:any;
 
   constructor(
     public navCtrl: NavController,
@@ -41,14 +43,11 @@ export class GamePlayPage {
     public gamedata: Gamedata) {
     this.socket = io('http://localhost:5001');
     this.socket.on('send bid', (bid, playerBid) => {
-      console.log('play this', bid, playerBid)
-      // this.play = play;
       this.bid = bid
       this.playerBid = playerBid
       this.checkBid(bid, playerBid)
     })
     this.socket.on('you marked', (playerNum) => {
-      console.log('play this', playerNum)
       if (this.playernum ===playerNum){
       this.gamedata.giveMark(this.game,this.phrase,playerNum)
       .then((data)=>{
@@ -57,19 +56,20 @@ export class GamePlayPage {
         this.markYou = true;
       })
     }
-      // this.play = play;
-
+    })
+    this.socket.on('new roll', (playerNum) => {
+      this.play = "play"
+      this.newRoll(this.play);
     })
   }
 
   ionViewDidLoad() {
     this.markYou=false;
-    console.log("onthispage")
     this.phrase = this.navParams.data.phrase
     this.gamedata.getGame(this.phrase)
     .then((data)=>{
-      console.log(data);
     })
+    //may need to change this!
     this.game = this.navParams.data.game
     this.players = this.game.players
     this.player = this.navParams.data.player
@@ -86,7 +86,6 @@ export class GamePlayPage {
   }
 
   playerShow(playerUp) {
-    console.log("player number happening", this.playerUp)
     for (var i = 0; i < this.players.length; i++) {
       if (this.playerUp === this.players[i].playerNum) {
         this.playerNameUp = this.players[i].name
@@ -99,8 +98,6 @@ export class GamePlayPage {
   //
   // }
   makeBid(num) {
-    console.log(this.totalDice)
-    console.log("game this", this)
     // if(this.totalDice){
     let alert = this.alertCtrl.create();
     alert.setTitle("Quanity of " + num);
@@ -121,14 +118,12 @@ export class GamePlayPage {
         this.bid = currentBid
         this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
       }else if(currentBid.quanity<this.bid.quanity){
-        console.log("increase quanity")
         let quant = this.alertCtrl.create({
           subTitle: 'Bid needs to include a higher quanity',
           buttons: ['OK']
         });
         quant.present();
       }else if(currentBid.quanity===this.bid.quanity&&currentBid.di<this.bid.di){
-        console.log("increase quanity")
         let quantNum = this.alertCtrl.create({
           subTitle: 'If the di face number is lower, the bid needs a greater quanity',
           buttons: ['OK']
@@ -137,8 +132,6 @@ export class GamePlayPage {
       }else{
         this.bid = currentBid
         this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
-        console.log("before", this.playerUp)
-        console.log("length", this.players.length)
       }
       }
     });
@@ -151,10 +144,8 @@ export class GamePlayPage {
     this.gamedata.getDice(this.phrase)
       .then((data) => {
         this.totalDice = data;
-        console.log(this.totalDice)
         let totalDice = this.totalDice.totalDice[0];
         let quanity = Number(bid.quanity)
-        console.log(totalDice)
         let check = 0
         if (totalDice) {
           for (var i = 0; i < totalDice.length; i++) {
@@ -163,15 +154,12 @@ export class GamePlayPage {
             }
           }
           if (check >= quanity) {
-            console.log("got it from player #", playerBid)
             this.bidResult = true
           } else {
-            console.log("not it from player#", playerBid)
             this.bidResult = false
           }
           if (playerBid < this.players.length){
             this.playerUp = playerBid+1
-            console.log("player number", this.playerUp)
           }else{
             this.playerUp = 1
           }
@@ -190,16 +178,10 @@ export class GamePlayPage {
   }
 
   bullShit() {
-    console.log("bullshit")
     if (!this.bidResult){
-      console.log("DIS BULLSHIT")
-      console.log(this.bid, "playerbid", this.playerBid)
       let mark = this.playerBid
       this.socket.emit('you marked', { page: this.phrase, playerNum: mark });
-       console.log("mark", mark, "game", this.game)
     }else{
-      console.log("you got a mark")
-      console.log(this.bid, "playerbid", this.playerBid)
       if (this.playerBid<this.players.length){
         let mark = this.playerBid + 1
         this.gamedata.giveMark(this.game,this.phrase,mark)
@@ -220,6 +202,15 @@ export class GamePlayPage {
       }
 
     }
+  }
+
+  newRoll(play){
+    this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
+    if(!this.play){
+      this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum });
+
+    }
+
   }
 
 

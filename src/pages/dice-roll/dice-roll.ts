@@ -33,7 +33,6 @@ export class DiceRollPage {
       this.socket.on('dice roll', () => {
         this.playersRolled++
         console.log(this.playersRolled, this.groupSize)
-        console.log("dice rolled")
         // this.play = play;
       })
 
@@ -44,7 +43,6 @@ export class DiceRollPage {
     this.player = this.navParams.data.player
     this.groupSize= this.navParams.data.groupNum
     this.playersRolled = 0
-    console.log(this.groupSize)
   }
 
   rollDice(){

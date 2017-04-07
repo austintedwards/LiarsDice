@@ -28,7 +28,6 @@ export class JoinGamePage {
     public alertCtrl: AlertController) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad JoingamePage');
 
   }
 

@@ -32,12 +32,10 @@ export class LoadingPage {
   ) {
     this.socket = io('http://localhost:5001');
     this.socket.on('message',(players)=>{
-      console.log('players',players)
       this.ionViewDidLoad()
     })
 
     this.socket.on('start game',(play)=>{
-      console.log('play this',play)
       this.play = play;
       this.beginGame()
     })
@@ -71,7 +69,6 @@ export class LoadingPage {
     if (otherPlayers>1){
       this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
       if (!this.play){
-        console.log("get it ")
         this.socket.emit('start game', {play:"play", page:this.phrase});
       }
     }else{
