@@ -34,6 +34,7 @@ export class GamePlayPage {
   markYou: any;
   playerMarks:any;
   play:any;
+  dicecheck:any;
 
   constructor(
     public navCtrl: NavController,
@@ -60,6 +61,12 @@ export class GamePlayPage {
     this.socket.on('new roll', (playerNum) => {
       this.play = "play"
       this.newRoll(this.play);
+    })
+    this.socket.on('dice roll', (dicecheck) => {
+      this.playersRolled++
+      this.dicecheck = dicecheck
+      console.log(this.dicecheck)
+      // this.play = play;
     })
   }
 
@@ -93,13 +100,13 @@ export class GamePlayPage {
     }
 
   }
-  // makeBid(){
-  //   console.log("makebid")
-  //
-  // }
+
   makeBid(num) {
-    // if(this.totalDice){
     let alert = this.alertCtrl.create();
+    let noBid = this.alertCtrl.create({
+      subTitle: 'Wait for All Players to Roll Dice.',
+      buttons: ['OK']});
+    if(this.dicecheck){
     alert.setTitle("Quanity of " + num);
     for (var i = 1; i < 21; i++) {
       var j = i.toString()
@@ -109,6 +116,7 @@ export class GamePlayPage {
         value: j
       });
     }
+
     alert.addButton('Cancel');
     alert.addButton({
       text: 'Ok',
@@ -137,7 +145,9 @@ export class GamePlayPage {
     });
     alert.present().then(() => {
     });
-
+  }else{
+    noBid.present();
+  }
   }
 
   checkBid(bid, playerBid) {

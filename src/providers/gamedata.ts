@@ -17,7 +17,7 @@ export class Gamedata {
 
   newPhrase(){
     return new Promise(resolve=>{
-    this.http.get("http://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=6&maxLength=6&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5")
+    this.http.get("http://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=6&maxLength=6&limit=1&api_key=ce6633f582cfd304a94050c97d200a34aef3946497b09ae63")
     // .map(res => res.json())
     .subscribe((data)=>{
       this.data = data.json()[0].word
@@ -44,11 +44,15 @@ addPlayer(game){
 }
 
 addRoll(game){
+  return new Promise(resolve=>{
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     this.http.put('http://localhost:5000/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
-    .subscribe(res => {
-    });
+    .subscribe((data)=>{
+      this.data=data.json()
+      resolve(this.data)
+    })
+  });
 }
 
 getGame(phrase){

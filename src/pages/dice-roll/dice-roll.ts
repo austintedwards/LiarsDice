@@ -30,11 +30,7 @@ export class DiceRollPage {
     public appCtrl: App
     ) {
       this.socket = io('http://localhost:5001');
-      this.socket.on('dice roll', () => {
-        this.playersRolled++
-        console.log(this.playersRolled, this.groupSize)
-        // this.play = play;
-      })
+  
 
     }
 
@@ -55,9 +51,13 @@ export class DiceRollPage {
       roll: dice
     };
     this.gamedata.addRoll(playerRoll)
-    this.phrase = playerRoll.phrase
-    this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase});
-    this.socket.emit('dice roll', { page: this.phrase});
+    .then((data)=>{
+      this.game=data
+      this.phrase = playerRoll.phrase
+      this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase});
+      this.socket.emit('dice roll', { page: this.phrase, totalDice: this.game.totalDice});
+    })
+
 
   }
 

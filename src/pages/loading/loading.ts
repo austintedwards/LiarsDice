@@ -22,6 +22,7 @@ export class LoadingPage {
   player:any;
   screenplay=[];
   play:any;
+  playernum:any;
 
   constructor(
     public navCtrl: NavController,
@@ -35,9 +36,14 @@ export class LoadingPage {
       this.ionViewDidLoad()
     })
 
-    this.socket.on('start game',(play)=>{
+    this.socket.on('start game',(play, playerNum)=>{
       this.play = play;
-      this.beginGame()
+      console.log("double up", this)
+      if (this.playernum !== playerNum){
+        this.beginGame()
+
+      }
+
     })
   }
 
@@ -64,12 +70,17 @@ export class LoadingPage {
       subTitle: 'Please wait for other players to join.',
       buttons: ['OK']
     });
+    for (var i = 0; i < this.players.length; i++) {
+      if (this.players[i].name === this.player) {
+        this.playernum = this.players[i].playerNum
+      }
+    }
 
     var otherPlayers = this.game.players.length
     if (otherPlayers>1){
       this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
       if (!this.play){
-        this.socket.emit('start game', {play:"play", page:this.phrase});
+        this.socket.emit('start game', {play:"play", page:this.phrase, playerNum:this.playernum});
       }
     }else{
       alert1.present();

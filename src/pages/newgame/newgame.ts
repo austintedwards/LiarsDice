@@ -22,6 +22,7 @@ export class NewGamePage {
     this.gamedata.newPhrase()
     .then((data) => {
     this.phrase = data;
+    console.log(this.phrase)
   });
 }
 
