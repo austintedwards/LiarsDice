@@ -3,6 +3,7 @@ import { NavController, NavParams, App, AlertController } from 'ionic-angular';
 import * as io from 'socket.io-client';
 import { Gamedata } from '../../providers/gamedata';
 import { DiceRollPage } from '../dice-roll/dice-roll';
+import { YouDonePage } from '../you-done/you-done';
 
 /*
   Generated class for the Gameplay page.
@@ -30,12 +31,14 @@ export class GamePlayPage {
   playerUp: any;
   playerName: any;
   playerNameUp: any;
-  bidResult:any;
+  bidResult: any;
   markYou: any;
-  playerMarks:any;
-  play:any;
-  dicecheck:any;
-  data:any;
+  playerMarks: any;
+  play: any;
+  dicecheck: any;
+  data: any;
+  youOut: any;
+  rollButton:any;
 
   constructor(
     public navCtrl: NavController,
@@ -50,14 +53,21 @@ export class GamePlayPage {
       this.checkBid(bid, playerBid)
     })
     this.socket.on('you marked', (playerNum) => {
-      if (this.playernum ===playerNum){
-      this.gamedata.giveMark(this.game,this.phrase,playerNum)
-      .then((data)=>{
-        this.game = data
-        this.playerMarks = this.game.players[playerNum-1].marks
-        this.markYou = true;
-      })
-    }
+      if (this.playernum === playerNum) {
+        this.gamedata.giveMark(this.game, this.phrase, playerNum)
+          .then((data) => {
+            this.game = data
+            this.playerMarks = this.game.players[playerNum - 1].marks
+            if (this.playerMarks < 5) {
+              this.markYou = true;
+              this.rollButton = true;
+            } else {
+              this.youOut = true;
+              this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
+
+            }
+          })
+      }
     })
     this.socket.on('new roll', (playerNum) => {
       this.play = "play"
@@ -69,20 +79,31 @@ export class GamePlayPage {
       console.log(this.dicecheck)
       // this.play = play;
     })
+    this.socket.on('out of game', (playerNum) => {
+      console.log(playerNum, "is out of game")
+      if (this.playernum === playerNum) {
+      // this.gamedata.giveMark(this.game, this.phrase, playerNum)
+    }else if (playerNum === this.players.length && this.playernum ===1){
+      this.rollButton = true;
+    }else if (this.playernum === playerNum+1){
+      this.rollButton = true;
+    }
+    })
   }
 
   ionViewDidLoad() {
-    this.markYou=false;
+    this.markYou = false;
+    this.rollButton = false;
     this.phrase = this.navParams.data.phrase
     this.gamedata.getGame(this.phrase)
-    .then((data)=>{
-      this.data = data
-      if (this.playernum===1){
-        if(this.data.totalDice.length>0){
-          this.dicecheck=this.data.totalDice
+      .then((data) => {
+        this.data = data
+        if (this.playernum === 1) {
+          if (this.data.totalDice.length > 0) {
+            this.dicecheck = this.data.totalDice
+          }
         }
-      }
-    })
+      })
     //may need to change this!
     this.game = this.navParams.data.game
     this.players = this.game.players
@@ -95,7 +116,7 @@ export class GamePlayPage {
       }
     }
 
-    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum});
+    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum });
     this.playerUp = 1
     this.playerShow(this.playerUp)
   }
@@ -113,49 +134,50 @@ export class GamePlayPage {
     let alert = this.alertCtrl.create();
     let noBid = this.alertCtrl.create({
       subTitle: 'Wait for All Players to Roll Dice.',
-      buttons: ['OK']});
-    if(this.dicecheck){
-    alert.setTitle("Quanity of " + num);
-    for (var i = 1; i < 21; i++) {
-      var j = i.toString()
-      alert.addInput({
-        type: 'radio',
-        label: j,
-        value: j
-      });
-    }
+      buttons: ['OK']
+    });
+    if (this.dicecheck) {
+      alert.setTitle("Quanity of " + num);
+      for (var i = 1; i < 21; i++) {
+        var j = i.toString()
+        alert.addInput({
+          type: 'radio',
+          label: j,
+          value: j
+        });
+      }
 
-    alert.addButton('Cancel');
-    alert.addButton({
-      text: 'Ok',
-      handler: data => {
-        var currentBid = { di: num, quanity: data }
-        if(!this.bid){
-        this.bid = currentBid
-        this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
-      }else if(currentBid.quanity<this.bid.quanity){
-        let quant = this.alertCtrl.create({
-          subTitle: 'Bid needs to include a higher quanity',
-          buttons: ['OK']
-        });
-        quant.present();
-      }else if(currentBid.quanity===this.bid.quanity&&currentBid.di<this.bid.di){
-        let quantNum = this.alertCtrl.create({
-          subTitle: 'If the di face number is lower, the bid needs a greater quanity',
-          buttons: ['OK']
-        });
-        quantNum.present();
-      }else{
-        this.bid = currentBid
-        this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
-      }
-      }
-    });
-    alert.present().then(() => {
-    });
-  }else{
-    noBid.present();
-  }
+      alert.addButton('Cancel');
+      alert.addButton({
+        text: 'Ok',
+        handler: data => {
+          var currentBid = { di: num, quanity: data }
+          if (!this.bid) {
+            this.bid = currentBid
+            this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
+          } else if (currentBid.quanity < this.bid.quanity) {
+            let quant = this.alertCtrl.create({
+              subTitle: 'Bid needs to include a higher quanity',
+              buttons: ['OK']
+            });
+            quant.present();
+          } else if (currentBid.quanity === this.bid.quanity && currentBid.di < this.bid.di) {
+            let quantNum = this.alertCtrl.create({
+              subTitle: 'If the di face number is lower, the bid needs a greater quanity',
+              buttons: ['OK']
+            });
+            quantNum.present();
+          } else {
+            this.bid = currentBid
+            this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
+          }
+        }
+      });
+      alert.present().then(() => {
+      });
+    } else {
+      noBid.present();
+    }
   }
 
   checkBid(bid, playerBid) {
@@ -163,7 +185,7 @@ export class GamePlayPage {
       .then((data) => {
         this.totalDice = data;
         let totalDice = this.totalDice.totalDice[0];
-        this.dicecheck=totalDice;
+        this.dicecheck = totalDice;
         let quanity = Number(bid.quanity)
         let check = 0
         if (totalDice) {
@@ -177,9 +199,9 @@ export class GamePlayPage {
           } else {
             this.bidResult = false
           }
-          if (playerBid < this.players.length){
-            this.playerUp = playerBid+1
-          }else{
+          if (playerBid < this.players.length) {
+            this.playerUp = playerBid + 1
+          } else {
             this.playerUp = 1
           }
           this.playerShow(this.playerUp)
@@ -197,39 +219,59 @@ export class GamePlayPage {
   }
 
   bullShit() {
-    if (!this.bidResult){
+    if (!this.bidResult) {
       let mark = this.playerBid
       this.socket.emit('you marked', { page: this.phrase, playerNum: mark });
-    }else{
-      if (this.playerBid<this.players.length){
+    } else {
+      if (this.playerBid < this.players.length) {
         let mark = this.playerBid + 1
-        this.gamedata.giveMark(this.game,this.phrase,mark)
-        .then((data)=>{
-          this.game = data
-          this.playerMarks = this.game.players[mark-1].marks
-          this.markYou = true;
-        })
-      }else{
+        this.gamedata.giveMark(this.game, this.phrase, mark)
+          .then((data) => {
+            this.game = data
+            this.playerMarks = this.game.players[mark - 1].marks
+            if (this.playerMarks < 5) {
+              this.markYou = true;
+              this.rollButton = true;
+            } else {
+              this.youOut = true;
+              this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
+
+            }
+          })
+      } else {
         let mark = 1
-        this.gamedata.giveMark(this.game,this.phrase,mark)
-        .then((data)=>{
-          this.game = data
-          this.playerMarks = this.game.players[mark-1].marks
-          this.markYou = true;
-        })
+        this.gamedata.giveMark(this.game, this.phrase, mark)
+          .then((data) => {
+            this.game = data
+            this.playerMarks = this.game.players[mark - 1].marks
+            if (this.playerMarks < 5) {
+              this.markYou = true;
+              this.rollButton = true;
+            } else {
+              this.youOut = true;
+              this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
+            }
+          })
 
       }
 
     }
   }
 
-  newRoll(play){
-    this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
-    if(!this.play){
-      this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum });
-
+  newRoll(play) {
+    if (!this.youOut){
+    this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, groupNum: this.players.length });
+      if (!this.play) {
+        this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum });
+      }
+    }else{
+      this.youDone()
     }
 
+  }
+
+  youDone(){
+    this.appCtrl.getRootNav().push(YouDonePage);
   }
 
 

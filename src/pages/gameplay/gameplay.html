@@ -48,9 +48,13 @@
     You have {{playerMarks}} marks
   </ion-card>
 
-    <button *ngIf = "markYou"  color = "light" class ="newRoll" ion-button block (click)="newRoll()">
+    <button *ngIf = "rollButton"  color = "light" class ="newRoll" ion-button block (click)="newRoll()">
       New Roll!
     </button>
+
+    <ion-card *ngIf = "youOut" class ="youOut">
+      You got 5 marks & are out of the game!
+    </ion-card>
 
 
   </ion-content>
