@@ -64,7 +64,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[playerNum - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 2) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -91,12 +91,11 @@ export class GamePlayPage {
     this.socket.on('out of game', (playerNum) => {
       if (this.playernum === playerNum) {
       this.gamedata.deletePlayer(this.phrase, playerNum)
-      .then(()=>{console.log("heyylow")
+      .then(()=>{
       this.socket.emit('game update', { page: this.phrase});})
-    }else if (playerNum === this.players.length && this.playernum ===1){
-      this.rollButton = true;
-    }else if (this.playernum === playerNum+1){
-      this.rollButton = true;
+    }else{
+      var deletedPlayer = this.players.indexOf({playerNum:playerNum})
+      console.log(deletedPlayer)
     }
     })
     this.socket.on('game update', () => {
@@ -104,6 +103,7 @@ export class GamePlayPage {
       .then((data)=>{
         this.game = data
         this.players = this.game.players
+
         if (this.players.length ===1){
           if(this.playernum===this.players[0].playerNum){
             this.appCtrl.getRootNav().push(YouWonPage, {phrase:this.phrase});
@@ -123,7 +123,7 @@ export class GamePlayPage {
     this.markYou = false;
     this.rollButton = false;
     this.phrase = this.navParams.data.phrase
-    if (this.playerMarks<1 ||!this.playerMarks){
+    if (this.playerMarks<2 ||!this.playerMarks){
     this.gamedata.getGame(this.phrase)
       .then((data) => {
         this.data = data
@@ -233,12 +233,22 @@ export class GamePlayPage {
           } else {
             this.bidResult = false
           }
-          if (playerBid < this.players.length) {
-            this.playerUp = playerBid + 1
-          } else {
-            this.playerUp = 1
-          }
-          this.playerShow(this.playerUp)
+          console.log("playerBid",playerBid)
+            for (var i = 0; i < this.players.length; i++) {
+              console.log("players", this.players[i])
+              if (this.players[i].playerNum === playerBid) {
+                if(this.players[i].playerNum===this.players[this.players.length-1].playerNum){
+                  this.playerUp=this.players[0].playerNum
+                  console.log("NOT play UP")
+                  return this.playerShow(this.playerUp)
+                }
+                this.playerUp=this.players[i+1].playerNum
+                console.log("play UP")
+                return this.playerShow(this.playerUp)
+
+              }
+            }
+            console.log("player up",this.playerUp)
         } else {
           let noBid = this.alertCtrl.create({
             subTitle: 'this is it',
@@ -263,7 +273,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 2) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -278,7 +288,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 2) {
               this.markYou = true;
               this.rollButton = true;
             } else {
