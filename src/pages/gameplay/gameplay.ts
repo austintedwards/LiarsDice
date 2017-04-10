@@ -58,7 +58,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[playerNum - 1].marks
-            if (this.playerMarks < 5) {
+            if (this.playerMarks < 1) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -82,7 +82,7 @@ export class GamePlayPage {
     this.socket.on('out of game', (playerNum) => {
       console.log(playerNum, "is out of game")
       if (this.playernum === playerNum) {
-      // this.gamedata.giveMark(this.game, this.phrase, playerNum)
+      this.gamedata.deletePlayer(this.phrase, playerNum)
     }else if (playerNum === this.players.length && this.playernum ===1){
       this.rollButton = true;
     }else if (this.playernum === playerNum+1){
@@ -95,6 +95,7 @@ export class GamePlayPage {
     this.markYou = false;
     this.rollButton = false;
     this.phrase = this.navParams.data.phrase
+    if (this.playerMarks<5 ||!this.playerMarks){
     this.gamedata.getGame(this.phrase)
       .then((data) => {
         this.data = data
@@ -104,6 +105,7 @@ export class GamePlayPage {
           }
         }
       })
+    }
     //may need to change this!
     this.game = this.navParams.data.game
     this.players = this.game.players

@@ -108,6 +108,14 @@ getMark(phrase, playerNum){
 })
 }
 
+deletePlayer(phrase, playerNum){
+  this.http.delete('http://localhost:5000/v1/api/game/'+phrase+"/"+playerNum)
+  .subscribe((data)=>{
+    console.log(data);
+  })
+
+}
+
 
 
 }
