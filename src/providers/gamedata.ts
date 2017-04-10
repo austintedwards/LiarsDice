@@ -87,7 +87,6 @@ getDice(phrase){
 
 giveMark(game,phrase,mark){
   return new Promise(resolve=>{
-
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     this.http.put('http://localhost:5000/v1/api/game/'+phrase+"/"+mark, JSON.stringify(game),{headers: headers})
@@ -113,7 +112,18 @@ deletePlayer(phrase, playerNum){
   .subscribe((data)=>{
     console.log(data);
   })
+}
 
+gameSize(game,phrase,players){
+  return new Promise(resolve=>{
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    this.http.put('http://localhost:5000/v1/api/game/'+phrase+"/players/"+players, JSON.stringify(game),{headers: headers})
+    .subscribe((data)=>{
+      this.data=data.json()
+      resolve(this.data)
+    })
+    })
 }
 
 

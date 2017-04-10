@@ -39,6 +39,10 @@ export class GamePlayPage {
   data: any;
   youOut: any;
   rollButton:any;
+  youUp:any;
+  markedPlayer:any;
+  array =[]
+  youWon:any;
 
   constructor(
     public navCtrl: NavController,
@@ -58,27 +62,34 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[playerNum - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 2) {
               this.markYou = true;
               this.rollButton = true;
             } else {
               this.youOut = true;
               this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
-
             }
           })
       }
     })
-    this.socket.on('new roll', (playerNum) => {
+    this.socket.on('new roll', (playerNum, youUp) => {
       this.play = "play"
-      this.newRoll(this.play);
+      this.youUp = youUp
+      console.log("player up", youUp)
+      console.log("player up now", this.youUp)
+
+      if(playerNum !==this.playernum){
+        this.newRoll(this.play);
+      }
     })
-    this.socket.on('dice roll', (dicecheck) => {
-      this.playersRolled++
-      this.dicecheck = dicecheck
-      console.log(this.dicecheck)
-      // this.play = play;
+    this.socket.on('player rolled', (data, game) => {
+      console.log("players in game", data)
+      this.array.push(data)
+      this.game = game
+      this.dicecheck = this.game.totalDice
+
     })
+
     this.socket.on('out of game', (playerNum) => {
       console.log(playerNum, "is out of game")
       if (this.playernum === playerNum) {
@@ -95,7 +106,7 @@ export class GamePlayPage {
     this.markYou = false;
     this.rollButton = false;
     this.phrase = this.navParams.data.phrase
-    if (this.playerMarks<5 ||!this.playerMarks){
+    if (this.playerMarks<2 ||!this.playerMarks){
     this.gamedata.getGame(this.phrase)
       .then((data) => {
         this.data = data
@@ -117,9 +128,14 @@ export class GamePlayPage {
         this.playernum = this.players[i].playerNum
       }
     }
-
-    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum });
-    this.playerUp = 1
+    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum, game:this.game});
+    this.youUp =this.navParams.data.youUp
+    console.log("person up",this.youUp)
+    if (!this.youUp){
+      this.playerUp = 1
+    }else{
+      this.playerUp = this.youUp
+    }
     this.playerShow(this.playerUp)
   }
 
@@ -138,7 +154,7 @@ export class GamePlayPage {
       subTitle: 'Wait for All Players to Roll Dice.',
       buttons: ['OK']
     });
-    if (this.dicecheck) {
+    if (this.dicecheck.length>0) {
       alert.setTitle("Quanity of " + num);
       for (var i = 1; i < 21; i++) {
         var j = i.toString()
@@ -231,7 +247,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 5) {
+            if (this.playerMarks < 2) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -246,7 +262,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 5) {
+            if (this.playerMarks < 2) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -262,10 +278,27 @@ export class GamePlayPage {
 
   newRoll(play) {
     if (!this.youOut){
-    this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, groupNum: this.players.length });
       if (!this.play) {
-        this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum });
+        if(this.playerUp ===this.playernum){
+          console.log("minus one")
+          this.youUp =this.playernum-1
+          console.log("the realy player", this.youUp)
+
+          if (this.youUp===0) {this.youUp=1}
+          console.log("the realy player", this.youUp)
+        }else{
+          console.log("plusone")
+          this.youUp = this.playernum+1
+          console.log("the realy player", this.youUp)
+
+          if (this.players.length<this.youUp)
+          {  this.youUp=1}
+          console.log("the realy player", this.youUp)
+
+        }
+        this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum, youUp:this.youUp });
       }
+      this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
     }else{
       this.youDone()
     }

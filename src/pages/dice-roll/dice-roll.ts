@@ -23,6 +23,9 @@ export class DiceRollPage {
   groupSize: any;
   playersRolled:any;
   dicecheck: any;
+  playerNum:any;
+  players:any;
+  youUp:any;
 
   constructor(
     public navCtrl: NavController,
@@ -31,12 +34,6 @@ export class DiceRollPage {
     public appCtrl: App
     ) {
       this.socket = io('http://localhost:5001');
-      this.socket.on('dice roll', (dicecheck) => {
-        this.playersRolled++
-        this.dicecheck = dicecheck
-        console.log(this.dicecheck)
-        // this.play = play;
-      })
 
     }
 
@@ -45,6 +42,12 @@ export class DiceRollPage {
     this.player = this.navParams.data.player
     this.groupSize= this.navParams.data.groupNum
     this.playersRolled = 0
+    console.log("dice playing",this.game)
+    this.players = this.game.players
+    if(this.navParams.data.youUp){
+      this.youUp =this.navParams.data.youUp
+      console.log("player coming up", this.youUp)
+    }
   }
 
   rollDice(){
@@ -56,12 +59,19 @@ export class DiceRollPage {
       phrase: this.game.passphrase,
       roll: dice
     };
+
+    for (var i = 0; i < this.players.length; i++) {
+      if (this.players[i].name === this.player) {
+        this.playerNum = this.players[i].playerNum
+      }
+    }
+    console.log("this num",this.playerNum)
+
     this.gamedata.addRoll(playerRoll)
     .then((data)=>{
       this.game=data
       this.phrase = playerRoll.phrase
-      this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase, dicecheck:this.dicecheck});
-      this.socket.emit('dice roll', { page: this.phrase, totalDice: this.game.totalDice});
+      this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase, dicecheck:this.dicecheck, youUp:this.youUp});
     })
 
 

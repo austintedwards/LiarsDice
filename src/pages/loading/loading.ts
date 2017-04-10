@@ -78,7 +78,11 @@ export class LoadingPage {
 
     var otherPlayers = this.game.players.length
     if (otherPlayers>1){
-      this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
+      this.gamedata.gameSize(this.game,this.phrase,otherPlayers)
+      .then((data)=>{
+        console.log(data)
+        this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
+      })
       if (!this.play){
         this.socket.emit('start game', {play:"play", page:this.phrase, playerNum:this.playernum});
       }
