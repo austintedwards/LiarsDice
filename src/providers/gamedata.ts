@@ -108,10 +108,14 @@ getMark(phrase, playerNum){
 }
 
 deletePlayer(phrase, playerNum){
+  return new Promise(resolve=>{
   this.http.delete('http://localhost:5000/v1/api/game/'+phrase+"/"+playerNum)
   .subscribe((data)=>{
-    console.log(data);
+    console.log("deleted data",data);
+    resolve(data)
   })
+})
+
 }
 
 gameSize(game,phrase,players){

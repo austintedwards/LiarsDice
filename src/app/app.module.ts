@@ -13,6 +13,7 @@ import { GamePlayPage } from '../pages/gameplay/gameplay';
 import { LoadingPage } from '../pages/loading/loading';
 import { DiceRollPage } from '../pages/dice-roll/dice-roll';
 import { YouDonePage } from '../pages/you-done/you-done';
+import { YouWonPage } from '../pages/you-won/you-won';
 
 
 
@@ -27,7 +28,8 @@ import { YouDonePage } from '../pages/you-done/you-done';
     GamePlayPage,
     LoadingPage,
     DiceRollPage,
-    YouDonePage
+    YouDonePage,
+    YouWonPage
 
   ],
   imports: [
@@ -44,7 +46,8 @@ import { YouDonePage } from '../pages/you-done/you-done';
     GamePlayPage,
     LoadingPage,
     DiceRollPage,
-    YouDonePage
+    YouDonePage,
+    YouWonPage 
   ],
   providers: [
     StatusBar,

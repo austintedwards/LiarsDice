@@ -42,11 +42,9 @@ export class DiceRollPage {
     this.player = this.navParams.data.player
     this.groupSize= this.navParams.data.groupNum
     this.playersRolled = 0
-    console.log("dice playing",this.game)
     this.players = this.game.players
     if(this.navParams.data.youUp){
       this.youUp =this.navParams.data.youUp
-      console.log("player coming up", this.youUp)
     }
   }
 
@@ -65,7 +63,6 @@ export class DiceRollPage {
         this.playerNum = this.players[i].playerNum
       }
     }
-    console.log("this num",this.playerNum)
 
     this.gamedata.addRoll(playerRoll)
     .then((data)=>{
