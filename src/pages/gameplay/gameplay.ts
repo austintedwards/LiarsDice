@@ -64,7 +64,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[playerNum - 1].marks
-            if (this.playerMarks < 2) {
+            if (this.playerMarks < 1) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -92,10 +92,10 @@ export class GamePlayPage {
       if (this.playernum === playerNum) {
       this.gamedata.deletePlayer(this.phrase, playerNum)
       .then(()=>{
-      this.socket.emit('game update', { page: this.phrase});})
+      this.socket.emit('game update', { page: this.phrase});
+      })
     }else{
-      var deletedPlayer = this.players.indexOf({playerNum:playerNum})
-      console.log(deletedPlayer)
+      this.rollButton = true;
     }
     })
     this.socket.on('game update', () => {
@@ -123,7 +123,7 @@ export class GamePlayPage {
     this.markYou = false;
     this.rollButton = false;
     this.phrase = this.navParams.data.phrase
-    if (this.playerMarks<2 ||!this.playerMarks){
+    if (this.playerMarks<1 ||!this.playerMarks){
     this.gamedata.getGame(this.phrase)
       .then((data) => {
         this.data = data
@@ -147,8 +147,10 @@ export class GamePlayPage {
     }
     this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum, game:this.game});
     this.youUp =this.navParams.data.youUp
+    console.log("players",this.players)
+    console.log(this.youUp)
     if (!this.youUp){
-      this.playerUp = 1
+        this.playerUp = this.players[0].playerNum
     }else{
       this.playerUp = this.youUp
     }
@@ -233,22 +235,17 @@ export class GamePlayPage {
           } else {
             this.bidResult = false
           }
-          console.log("playerBid",playerBid)
             for (var i = 0; i < this.players.length; i++) {
-              console.log("players", this.players[i])
               if (this.players[i].playerNum === playerBid) {
                 if(this.players[i].playerNum===this.players[this.players.length-1].playerNum){
                   this.playerUp=this.players[0].playerNum
-                  console.log("NOT play UP")
                   return this.playerShow(this.playerUp)
                 }
                 this.playerUp=this.players[i+1].playerNum
-                console.log("play UP")
                 return this.playerShow(this.playerUp)
 
               }
             }
-            console.log("player up",this.playerUp)
         } else {
           let noBid = this.alertCtrl.create({
             subTitle: 'this is it',
@@ -273,7 +270,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 2) {
+            if (this.playerMarks < 1) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -288,7 +285,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 2) {
+            if (this.playerMarks < 1) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -306,12 +303,13 @@ export class GamePlayPage {
     if (!this.youOut){
       if (!this.play) {
         if(this.playerUp ===this.playernum){
-          this.youUp =this.playernum-1
-          if (this.youUp===0) {this.youUp=1}
+          this.youUp =this.playernum
+          if (this.youUp===0)
+          {this.youUp=this.players[0].playerNum}
         }else{
-          this.youUp = this.playernum+1
+          this.youUp = this.playernum
           if (this.players.length<this.youUp)
-          {  this.youUp=1}
+          {  this.youUp=this.players[0].playerNum}
         }
         this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum, youUp:this.youUp });
       }
@@ -321,6 +319,8 @@ export class GamePlayPage {
     }
 
   }
+
+
 
   youDone(){
     this.appCtrl.getRootNav().push(YouDonePage);
