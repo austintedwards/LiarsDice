@@ -19,7 +19,7 @@ export class YouDonePage {
   constructor(public appCtrl: App,
     public navCtrl: NavController,
     public navParams: NavParams){
-      this.socket = io('http://localhost:5001');
+      this.socket = io('https://diceliar.herokuapp.com');
       this.socket.on('main menu',()=>{
         console.log("main menu")
         this.backToStart()
@@ -30,7 +30,7 @@ export class YouDonePage {
     console.log('ionViewDidLoad YouDonePage');
   }
   backToStart(){
-    this.appCtrl.getRootNav().push(HomePage)
+    this.appCtrl.getRootNav().popToRoot()
   }
 
 }

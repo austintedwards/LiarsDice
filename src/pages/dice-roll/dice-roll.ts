@@ -33,7 +33,7 @@ export class DiceRollPage {
     public gamedata:Gamedata,
     public appCtrl: App
     ) {
-      this.socket = io('http://localhost:5001');
+      this.socket = io('https://diceliar.herokuapp.com');
 
     }
 
@@ -69,6 +69,7 @@ export class DiceRollPage {
       this.game=data
       this.phrase = playerRoll.phrase
       this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase, dicecheck:this.dicecheck, youUp:this.youUp});
+      console.log(this.appCtrl.getRootNav())
     })
 
 

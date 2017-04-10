@@ -52,7 +52,7 @@ export class GamePlayPage {
     public appCtrl: App,
     public alertCtrl: AlertController,
     public gamedata: Gamedata) {
-    this.socket = io('http://localhost:5001');
+    this.socket = io('https://diceliar.herokuapp.com');
     this.socket.on('send bid', (bid, playerBid) => {
       this.bid = bid
       this.playerBid = playerBid
@@ -64,7 +64,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[playerNum - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 5) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -77,6 +77,7 @@ export class GamePlayPage {
     this.socket.on('new roll', (playerNum, youUp) => {
       this.play = "play"
       this.youUp = youUp
+      console.log(playerNum)
       if(playerNum !==this.playernum){
         this.newRoll(this.play);
       }
@@ -90,8 +91,10 @@ export class GamePlayPage {
 
     this.socket.on('out of game', (playerNum) => {
       if (this.playernum === playerNum) {
+        console.log("this working")
       this.gamedata.deletePlayer(this.phrase, playerNum)
       .then(()=>{
+        console.log("going to updat")
       this.socket.emit('game update', { page: this.phrase});
       })
     }else{
@@ -103,7 +106,8 @@ export class GamePlayPage {
       .then((data)=>{
         this.game = data
         this.players = this.game.players
-
+          console.log("this playernum",this.playernum)
+          console.log("this playernum",this.players[0].playerNum)
         if (this.players.length ===1){
           if(this.playernum===this.players[0].playerNum){
             this.appCtrl.getRootNav().push(YouWonPage, {phrase:this.phrase});
@@ -120,10 +124,11 @@ export class GamePlayPage {
   }
 
   ionViewDidLoad() {
+    console.log(this.navCtrl)
     this.markYou = false;
     this.rollButton = false;
     this.phrase = this.navParams.data.phrase
-    if (this.playerMarks<1 ||!this.playerMarks){
+    if (this.playerMarks<5 ||!this.playerMarks){
     this.gamedata.getGame(this.phrase)
       .then((data) => {
         this.data = data
@@ -270,7 +275,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 5) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -285,7 +290,7 @@ export class GamePlayPage {
           .then((data) => {
             this.game = data
             this.playerMarks = this.game.players[mark - 1].marks
-            if (this.playerMarks < 1) {
+            if (this.playerMarks < 5) {
               this.markYou = true;
               this.rollButton = true;
             } else {
@@ -313,7 +318,8 @@ export class GamePlayPage {
         }
         this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum, youUp:this.youUp });
       }
-      this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
+      // this.navCtrl.pop();
+      this.appCtrl.getRootNav().push({ game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
     }else{
       this.youDone()
     }
@@ -326,7 +332,7 @@ export class GamePlayPage {
     this.appCtrl.getRootNav().push(YouDonePage);
   }
   backToStart(){
-    this.appCtrl.getRootNav().push(HomePage)
+    this.appCtrl.getRootNav().popToRoot()
   }
 
 }

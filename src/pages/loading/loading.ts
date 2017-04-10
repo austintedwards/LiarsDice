@@ -31,7 +31,7 @@ export class LoadingPage {
     public appCtrl: App,
     public alertCtrl: AlertController
   ) {
-    this.socket = io('http://localhost:5001');
+    this.socket = io('https://diceliar.herokuapp.com');
     this.socket.on('message',(players)=>{
       this.ionViewDidLoad()
     })
