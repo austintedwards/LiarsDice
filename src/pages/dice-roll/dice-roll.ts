@@ -36,7 +36,7 @@ export class DiceRollPage {
     public gamedata:Gamedata,
     public appCtrl: App
     ) {
-      this.socket = io('https://diceliar.herokuapp.com');
+      this.socket = io('http://localhost:5000');
 
     }
 

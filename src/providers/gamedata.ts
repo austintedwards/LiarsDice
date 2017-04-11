@@ -30,7 +30,7 @@ export class Gamedata {
   let headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
-  this.http.post('https://diceliar.herokuapp.com/v1/api/game', JSON.stringify(game), {headers: headers})
+  this.http.post('http://localhost:5000/v1/api/game', JSON.stringify(game), {headers: headers})
     .subscribe(res => {
     });
 }
@@ -38,7 +38,7 @@ export class Gamedata {
 addPlayer(game){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    this.http.put('https://diceliar.herokuapp.com/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
+    this.http.put('http://localhost:5000/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
     .subscribe(res => {
     });
 }
@@ -47,7 +47,7 @@ addRoll(game){
   return new Promise(resolve=>{
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    this.http.put('https://diceliar.herokuapp.com/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
+    this.http.put('http://localhost:5000/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
     .subscribe((data)=>{
       this.data=data.json()
       resolve(this.data)
@@ -57,7 +57,7 @@ addRoll(game){
 
 getGame(phrase){
   return new Promise(resolve=>{
-  this.http.get('https://diceliar.herokuapp.com/v1/api/game/'+phrase)
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase)
   .subscribe((data)=>{
     this.data=data.json()
     resolve(this.data)
@@ -67,7 +67,7 @@ getGame(phrase){
 
 getPlayers(phrase){
   return new Promise(resolve=>{
-  this.http.get('https://diceliar.herokuapp.com/v1/api/game/'+phrase)
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase)
   .subscribe((data)=>{
     this.data=data.json()
     resolve(this.data)
@@ -77,7 +77,7 @@ getPlayers(phrase){
 
 getDice(phrase){
   return new Promise(resolve=>{
-  this.http.get('https://diceliar.herokuapp.com/v1/api/game/'+phrase)
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase)
   .subscribe((data)=>{
     this.data=data.json()
     resolve(this.data)
@@ -89,7 +89,7 @@ giveMark(game,phrase,mark){
   return new Promise(resolve=>{
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    this.http.put('https://diceliar.herokuapp.com/v1/api/game/'+phrase+"/"+mark, JSON.stringify(game),{headers: headers})
+    this.http.put('http://localhost:5000/v1/api/game/'+phrase+"/"+mark, JSON.stringify(game),{headers: headers})
     .subscribe((data)=>{
       this.data=data.json()
       resolve(this.data)
@@ -99,7 +99,7 @@ giveMark(game,phrase,mark){
 
 getMark(phrase, playerNum){
   return new Promise(resolve=>{
-  this.http.get('https://diceliar.herokuapp.com/v1/api/game/'+phrase+"/"+playerNum)
+  this.http.get('http://localhost:5000/v1/api/game/'+phrase+"/"+playerNum)
   .subscribe((data)=>{
     this.data=data.json()
     resolve(this.data)
@@ -109,7 +109,7 @@ getMark(phrase, playerNum){
 
 deletePlayer(phrase, playerNum){
   return new Promise(resolve=>{
-  this.http.delete('https://diceliar.herokuapp.com/v1/api/game/'+phrase+"/"+playerNum)
+  this.http.delete('http://localhost:5000/v1/api/game/'+phrase+"/"+playerNum)
   .subscribe((data)=>{
     console.log("deleted data",data);
     resolve(data)
@@ -122,7 +122,7 @@ gameSize(game,phrase,players){
   return new Promise(resolve=>{
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    this.http.put('https://diceliar.herokuapp.com/v1/api/game/'+phrase+"/players/"+players, JSON.stringify(game),{headers: headers})
+    this.http.put('http://localhost:5000/v1/api/game/'+phrase+"/players/"+players, JSON.stringify(game),{headers: headers})
     .subscribe((data)=>{
       this.data=data.json()
       resolve(this.data)

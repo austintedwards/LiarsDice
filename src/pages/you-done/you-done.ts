@@ -18,7 +18,7 @@ export class YouDonePage {
   constructor(public appCtrl: App,
     public navCtrl: NavController,
     public navParams: NavParams){
-      this.socket = io('https://diceliar.herokuapp.com');
+      this.socket = io('http://localhost:5000');
       this.socket.on('main menu',()=>{
         console.log("main menu")
         this.backToStart()
