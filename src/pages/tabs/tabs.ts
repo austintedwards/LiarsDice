@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import { HomePage } from '../home/home';
 import { AboutPage } from '../about/about';
-import { GamePlayPage } from '../gameplay/gameplay';
 
 @Component({
   templateUrl: 'tabs.html'

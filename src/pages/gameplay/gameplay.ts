@@ -5,7 +5,6 @@ import { Gamedata } from '../../providers/gamedata';
 import { DiceRollPage } from '../dice-roll/dice-roll';
 import { YouDonePage } from '../you-done/you-done';
 import { YouWonPage } from '../you-won/you-won';
-import { HomePage } from '../home/home';
 
 /*
   Generated class for the Gameplay page.
@@ -79,7 +78,7 @@ export class GamePlayPage {
       this.youUp = youUp
       console.log(playerNum)
       if(playerNum !==this.playernum){
-        this.newRoll(this.play);
+        this.newRoll();
       }
     })
     this.socket.on('player rolled', (data, game) => {
@@ -304,7 +303,7 @@ export class GamePlayPage {
     }
   }
 
-  newRoll(play) {
+  newRoll() {
     if (!this.youOut){
       if (!this.play) {
         if(this.playerUp ===this.playernum){
@@ -319,7 +318,7 @@ export class GamePlayPage {
         this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum, youUp:this.youUp });
       }
       // this.navCtrl.pop();
-      this.appCtrl.getRootNav().push({ game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
+      this.appCtrl.getRootNav().push(DiceRollPage,{ game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
     }else{
       this.youDone()
     }

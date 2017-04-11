@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, App } from 'ionic-angular';
-import { HomePage } from '../home/home';
 import * as io from 'socket.io-client';
 
 /*
