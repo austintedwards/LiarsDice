@@ -8,9 +8,7 @@
 
 <ion-content padding>
   Dice
-    <ion-card class = "di" *ngFor="let di of dice">
-      {{di}}
-    </ion-card>
+      <img *ngFor="let di of dice" class = "diceGifs" src="assets/images/Dice{{di}}.gif"/>
     <ion-card *ngIf = "bid" class ="bidgiven">
       Bid was {{bid.quanity}}  {{bid.di}}'s
     </ion-card>
