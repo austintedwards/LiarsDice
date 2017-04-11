@@ -44,6 +44,7 @@ export class GamePlayPage {
   markedPlayer:any;
   array =[]
   youWon:any;
+  bullButton:any;
 
   constructor(
     public navCtrl: NavController,
@@ -123,6 +124,8 @@ export class GamePlayPage {
   }
 
   ionViewDidLoad() {
+    this.bullButton = true;
+
     console.log(this.navCtrl)
     this.markYou = false;
     this.rollButton = false;
@@ -264,6 +267,7 @@ export class GamePlayPage {
   }
 
   bullShit() {
+    this.bullButton = false;
     if (!this.bidResult) {
       let mark = this.playerBid
       this.socket.emit('you marked', { page: this.phrase, playerNum: mark });

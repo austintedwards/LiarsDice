@@ -8,12 +8,14 @@
 
 <ion-content padding>
   Dice
-      <img *ngFor="let di of dice" class = "diceGifs" src="assets/images/Dice{{di}}.gif"/>
+  <img *ngFor="let di of dice" class = "diceGifs" src="assets/images/Dice{{di}}.gif"/>
     <ion-card *ngIf = "bid" class ="bidgiven">
       Bid was {{bid.quanity}}  {{bid.di}}'s
     </ion-card>
-    <ion-content [ngSwitch] = "playerUp">
-      <ion-item  *ngSwitchCase = "playernum">
+<ion-item no-lines *ngIf  = "bullButton">
+
+<ion-item no-lines [ngSwitch] = "playerUp">
+  <ion-item no-lines  *ngSwitchCase = "playernum">
       <button class = "bidcard" ion-button block >
         Make Bid
       </button>
@@ -42,18 +44,20 @@
   <ion-card-header *ngSwitchDefault class="player{{playerUp}}">
     It is {{playerNameUp}}'s turn.
   </ion-card-header>
+</ion-item>
+</ion-item>
+
+
+<ion-item no-lines>
   <ion-card *ngIf = "markYou" class ="markYou">
     You have {{playerMarks}} marks
   </ion-card>
-
     <button *ngIf = "rollButton"  color = "light" class ="newRoll" ion-button block (click)="newRoll()">
       New Roll!
     </button>
     <ion-card *ngIf = "youOut" class ="youOut">
       You got 5 marks & are out of the game!
     </ion-card>
-
-
-  </ion-content>
+  </ion-item>
 
 </ion-content>
