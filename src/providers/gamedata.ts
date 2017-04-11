@@ -26,21 +26,29 @@ export class Gamedata {
   })
   }
 
-  createGame(game){
+createGame(game){
+  return new Promise(resolve=>{
   let headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
   this.http.post('http://localhost:5000/v1/api/game', JSON.stringify(game), {headers: headers})
-    .subscribe(res => {
+    .subscribe((data) => {
+      this.data=data.json()
+      resolve(this.data)
     });
+  });
 }
 
 addPlayer(game){
+  return new Promise(resolve=>{
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     this.http.put('http://localhost:5000/v1/api/game/'+game.phrase, JSON.stringify(game),{headers: headers})
-    .subscribe(res => {
+    .subscribe((data) => {
+      this.data=data.json()
+      resolve(this.data)
     });
+  });
 }
 
 addRoll(game){

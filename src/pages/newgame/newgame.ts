@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {App, ViewController, AlertController} from 'ionic-angular';
 import { Gamedata } from '../../providers/gamedata';
-import { LoadingPage } from '../loading/loading';
 
 @Component({
   selector: 'new-game-page',
@@ -43,7 +42,6 @@ startGame(): void {
 
     if (this.player&&this.phrase){
     this.viewCtrl.dismiss(game);
-    this.appCtrl.getRootNav().push(LoadingPage,{phrase:this.phrase, player:this.player});
   }else if(!this.phrase){
     phraseAlert.present();
   }else{

@@ -23,6 +23,7 @@ export class LoadingPage {
   screenplay = [];
   play: any;
   playernum: any;
+  playedIt:any;
 
   constructor(
     public navCtrl: NavController,
@@ -33,7 +34,8 @@ export class LoadingPage {
   ) {
     // this.socket = io('http://localhost:5000');
     this.socket = io('http://localhost:5000');
-    this.socket.on('message', (players) => {
+    this.socket.on('players', (players) => {
+      this.playedIt = true;
       this.ionViewDidLoad()
     })
     this.socket.on('start game', (play, playerNum, otherPlayers) => {
@@ -47,17 +49,12 @@ export class LoadingPage {
   ionViewDidLoad() {
     this.player = this.navParams.data.player
     this.phrase = this.navParams.data.phrase
-    var playnum = this.navParams.data.playnum
     this.gamedata.getPlayers(this.phrase)
       .then((data) => {
         this.game = data;
         this.players = this.game.players;
-        if (this.players) {
-          var playerLength = this.players.length
-        }
-        if (this.game.passphrase === "not working" || playerLength === playnum) {
-          this.ionViewDidLoad()
-          this.socket.emit('message', { player: this.player, page: this.phrase });
+        if(!this.playedIt){
+          this.socket.emit('players', { player: this.player, page: this.phrase });
         }
       });
   }
