@@ -26,6 +26,9 @@ export class DiceRollPage {
   playerNum:any;
   players:any;
   youUp:any;
+  youRolled:any;
+  testArr=[];
+  workWithThis=[];
 
   constructor(
     public navCtrl: NavController,
@@ -38,6 +41,9 @@ export class DiceRollPage {
     }
 
   ionViewDidLoad() {
+    this.workWithThis.push(1)
+    console.log("work with this", this.workWithThis)
+    this.youRolled = false;
     this.game = this.navParams.data.game
     this.player = this.navParams.data.player
     this.groupSize= this.navParams.data.groupNum
@@ -49,6 +55,7 @@ export class DiceRollPage {
   }
 
   rollDice(){
+    this.youRolled = true;
     let dice = []
     for (var i =0; i<5; i++){
       dice.push(Math.floor(Math.random()*6)+1)
@@ -63,17 +70,20 @@ export class DiceRollPage {
         this.playerNum = this.players[i].playerNum
       }
     }
-
+    console.log("working")
+    this.testArr.push(1)
+    console.log("testing", this.testArr)
+    // if(this.testArr.length===this.workWithThis.length)
     this.gamedata.addRoll(playerRoll)
     .then((data)=>{
       this.game=data
+      console.log("happens now")
       this.phrase = playerRoll.phrase
       this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase, dicecheck:this.dicecheck, youUp:this.youUp});
-      // console.log(this.appCtrl.getRootNav())
     })
 
 
+
+
   }
-
-
 }

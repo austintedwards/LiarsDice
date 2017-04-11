@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, App, AlertController } from 'ionic-angular';
 import * as io from 'socket.io-client';
 import { Gamedata } from '../../providers/gamedata';
-import { DiceRollPage } from '../dice-roll/dice-roll';
+// import { DiceRollPage } from '../dice-roll/dice-roll';
 import { YouDonePage } from '../you-done/you-done';
 import { YouWonPage } from '../you-won/you-won';
 
@@ -45,7 +45,13 @@ export class GamePlayPage {
   array =[]
   youWon:any;
   bullButton:any;
-
+  dontHit:any;
+  dontMark:any;
+  dontWin: any;
+  dontLose:any;
+  outHit:any;
+  youRolled:any;
+  numTest = [];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -59,9 +65,11 @@ export class GamePlayPage {
       this.checkBid(bid, playerBid)
     })
     this.socket.on('you marked', (playerNum) => {
-      if (this.playernum === playerNum) {
+      if (this.playernum === playerNum &&!this.dontMark) {
+        this.dontMark =true;
         this.gamedata.giveMark(this.game, this.phrase, playerNum)
           .then((data) => {
+            console.log("gaveMark")
             this.game = data
             this.playerMarks = this.game.players[playerNum - 1].marks
             if (this.playerMarks < 5) {
@@ -69,6 +77,7 @@ export class GamePlayPage {
               this.rollButton = true;
             } else {
               this.youOut = true;
+              console.log("fix this")
               this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
             }
           })
@@ -78,8 +87,10 @@ export class GamePlayPage {
       this.play = "play"
       this.youUp = youUp
       console.log(playerNum)
-      if(playerNum !==this.playernum){
-        this.newRoll();
+      // this.appCtrl.getRootNav().push(DiceRollPage,{ game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
+      if(!this.dontHit){
+        this.dontHit=true;
+        this.appCtrl.getRootNav().pop()
       }
     })
     this.socket.on('player rolled', (data, game) => {
@@ -90,31 +101,38 @@ export class GamePlayPage {
     })
 
     this.socket.on('out of game', (playerNum) => {
+      if(!this.outHit){
+        this.outHit=true;
       if (this.playernum === playerNum) {
-        console.log("this working")
       this.gamedata.deletePlayer(this.phrase, playerNum)
       .then(()=>{
-        console.log("going to updat")
       this.socket.emit('game update', { page: this.phrase});
       })
     }else{
       this.rollButton = true;
     }
+    }
     })
-    this.socket.on('game update', () => {
+    this.socket.on('game update', (once) => {
       this.gamedata.getGame(this.phrase)
       .then((data)=>{
         this.game = data
         this.players = this.game.players
-          console.log("this playernum",this.playernum)
-          console.log("this playernum",this.players[0].playerNum)
+        this.numTest.push(1)
+        if(this.numTest.length>1){
         if (this.players.length ===1){
-          if(this.playernum===this.players[0].playerNum){
-            this.appCtrl.getRootNav().push(YouWonPage, {phrase:this.phrase});
-          }else{
-            this.appCtrl.getRootNav().push(YouDonePage);
+          if(this.playernum===this.players[0].playerNum &&!this.dontWin){
+            console.log("bye")
+            this.dontWin = true;
+            this.dontLose=true;
+            return this.appCtrl.getRootNav().push(YouWonPage, {phrase:this.phrase});
+          }else if(!this.dontLose){
+            this.dontLose=true;
+            console.log("hello")
+            return this.appCtrl.getRootNav().push(YouDonePage);
           }
         }
+      }
       })
     })
     this.socket.on('main menu',()=>{
@@ -125,7 +143,7 @@ export class GamePlayPage {
 
   ionViewDidLoad() {
     this.bullButton = true;
-
+    this.outHit = false;
     console.log(this.navCtrl)
     this.markYou = false;
     this.rollButton = false;
@@ -276,13 +294,19 @@ export class GamePlayPage {
         let mark = this.playerBid + 1
         this.gamedata.giveMark(this.game, this.phrase, mark)
           .then((data) => {
+            console.log("gaveMark")
             this.game = data
-            this.playerMarks = this.game.players[mark - 1].marks
+            for (var i = 0; i<this.game.players.length; i++){
+              if(this.playernum===this.game.players[i].playerNum){
+                this.playerMarks = this.game.players[i].marks
+              }
+            }
             if (this.playerMarks < 5) {
               this.markYou = true;
               this.rollButton = true;
             } else {
               this.youOut = true;
+              console.log("help")
               this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
 
             }
@@ -291,13 +315,19 @@ export class GamePlayPage {
         let mark = 1
         this.gamedata.giveMark(this.game, this.phrase, mark)
           .then((data) => {
+            console.log("gaveMark")
             this.game = data
-            this.playerMarks = this.game.players[mark - 1].marks
+            for (var i = 0; i<this.game.players.length; i++){
+              if(this.playernum===this.game.players[i].playerNum){
+                this.playerMarks = this.game.players[i].marks
+              }
+            }
             if (this.playerMarks < 5) {
               this.markYou = true;
               this.rollButton = true;
             } else {
               this.youOut = true;
+              console.log("please")
               this.socket.emit('out of game', {page: this.phrase, player: this.playernum });
             }
           })
@@ -322,7 +352,6 @@ export class GamePlayPage {
         this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum, youUp:this.youUp });
       }
       // this.navCtrl.pop();
-      this.appCtrl.getRootNav().push(DiceRollPage,{ game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
     }else{
       this.youDone()
     }
@@ -335,7 +364,7 @@ export class GamePlayPage {
     this.appCtrl.getRootNav().push(YouDonePage);
   }
   backToStart(){
-    this.appCtrl.getRootNav().popToRoot()
+    // this.appCtrl.getRootNav().popToRoot()
   }
 
 }

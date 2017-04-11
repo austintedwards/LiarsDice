@@ -15,57 +15,54 @@ import { DiceRollPage } from '../dice-roll/dice-roll';
   templateUrl: 'loading.html'
 })
 export class LoadingPage {
-  game:any;
+  game: any;
   players: any;
   phrase: any;
-  socket:any;
-  player:any;
-  screenplay=[];
-  play:any;
-  playernum:any;
+  socket: any;
+  player: any;
+  screenplay = [];
+  play: any;
+  playernum: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public gamedata:Gamedata,
+    public gamedata: Gamedata,
     public appCtrl: App,
     public alertCtrl: AlertController
   ) {
-    this.socket = io('https://diceliar.herokuapp.com');
-    this.socket.on('message',(players)=>{
+    // this.socket = io('https://diceliar.herokuapp.com');
+    this.socket = io('http://localhost:5000');
+    this.socket.on('message', (players) => {
       this.ionViewDidLoad()
     })
-
-    this.socket.on('start game',(play, playerNum)=>{
-      this.play = play;
-      console.log("double up", this)
-      if (this.playernum !== playerNum){
-        this.beginGame()
-
-      }
-
+    this.socket.on('start game', (play, playerNum, otherPlayers) => {
+      this.gamedata.gameSize(this.game, this.phrase, otherPlayers)
+        .then((data) => {
+          this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, groupNum: this.players.length });
+        })
     })
   }
 
   ionViewDidLoad() {
-      this.player = this.navParams.data.player
-      this.phrase = this.navParams.data.phrase
-      var playnum = this.navParams.data.playnum
-      this.gamedata.getPlayers(this.phrase)
+    this.player = this.navParams.data.player
+    this.phrase = this.navParams.data.phrase
+    var playnum = this.navParams.data.playnum
+    this.gamedata.getPlayers(this.phrase)
       .then((data) => {
-      this.game = data;
-      this.players = this.game.players;
-      if(this.players){
-        var playerLength = this.players.length
+        this.game = data;
+        this.players = this.game.players;
+        if (this.players) {
+          var playerLength = this.players.length
         }
-      if(this.game.passphrase==="not working" || playerLength===playnum){
-        this.ionViewDidLoad()
-        this.socket.emit('message', {player:this.player, page:this.phrase});
-      }
-    });
+        if (this.game.passphrase === "not working" || playerLength === playnum) {
+          this.ionViewDidLoad()
+          this.socket.emit('message', { player: this.player, page: this.phrase });
+        }
+      });
   }
 
-  beginGame(){
+  beginGame() {
     let alert1 = this.alertCtrl.create({
       subTitle: 'Please wait for other players to join.',
       buttons: ['OK']
@@ -75,21 +72,11 @@ export class LoadingPage {
         this.playernum = this.players[i].playerNum
       }
     }
-
     var otherPlayers = this.game.players.length
-    if (otherPlayers>1){
-      this.gamedata.gameSize(this.game,this.phrase,otherPlayers)
-      .then((data)=>{
-        console.log(data)
-        this.appCtrl.getRootNav().push(DiceRollPage,{game:this.game, player:this.player, groupNum:this.players.length});
-      })
-      if (!this.play){
-        this.socket.emit('start game', {play:"play", page:this.phrase, playerNum:this.playernum});
-      }
-    }else{
+    if (otherPlayers > 1) {
+      this.socket.emit('start game', { play: "play", page: this.phrase, playerNum: this.playernum, otherPlayers: otherPlayers });
+    } else {
       alert1.present();
     }
-
   }
-
 }
