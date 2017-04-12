@@ -80,7 +80,7 @@ export class GamePlayPage {
     this.socket.on('you marked', (playerNum) => {
       this.dontMark++
       console.log(this.dontMark)
-      if (this.playernum === playerNum && this.dontMark<=this.players.length) {
+      if (this.playernum === playerNum && this.dontMark<=1) {
         this.gamedata.giveMark(this.game, this.phrase, this.playernum)
           .then((data) => {
             console.log('marked socket')
@@ -132,7 +132,8 @@ export class GamePlayPage {
       this.socket.emit('game update', { page: this.phrase});
       })
     }else{
-      this.rollButton = true;
+        this.rollButton = true;
+        console.log(this.players.indexOf(playerNum))
     }
     }
     })
@@ -180,6 +181,8 @@ export class GamePlayPage {
       this.players = this.game.players
       this.dicecheck = this.game.totalDice
       this.playerUp=this.game.playerUp
+      console.log("thisgame",this.game)
+      console.log("Player Up",this.playerUp)
       this.playerShow(this.playerUp)
       this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum, game:this.game});
     })
@@ -216,7 +219,7 @@ export class GamePlayPage {
       alert.addButton({
         text: 'Ok',
         handler: data => {
-          var currentBid = { di: num, quanity: data }
+          var currentBid = { di: Number(num), quanity: Number(data) }
           console.log("bid data", currentBid)
           console.log("compare this", this.bid)
           if (!this.bid) {
