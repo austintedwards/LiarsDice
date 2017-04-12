@@ -18,24 +18,36 @@
       <ion-card class = "bidcard" >
         Make Bid
       </ion-card>
+  <ion-item no-lines>
   <button class = "bid"  round (click)="makeBid(1)">
     1
   </button>
   <button class = "bid"  round (click)="makeBid(2)">
     2
   </button>
+</ion-item>
+
+  <ion-item no-lines>
+
   <button class = "bid"  round (click)="makeBid(3)">
     3
   </button>
+
   <button class = "bid"  round (click)="makeBid(4)">
     4
   </button>
+</ion-item>
+
+  <ion-item no-lines>
+
   <button class = "bid"   round (click)="makeBid(5)">
     5
   </button>
   <button class = "bid"  round (click)="makeBid(6)">
     6
   </button>
+</ion-item>
+
       <ion-card *ngIf = "bid" color = "danger" class ="bullshit"  (click)="bullShit()">
         Bullshit
       </ion-card>

@@ -133,7 +133,6 @@ export class GamePlayPage {
       })
     }else{
         this.rollButton = true;
-        console.log(this.players.indexOf(playerNum))
     }
     }
     })
