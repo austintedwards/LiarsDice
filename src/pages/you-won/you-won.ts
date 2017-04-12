@@ -19,7 +19,7 @@ export class YouWonPage {
   constructor(public appCtrl: App,
      public navCtrl: NavController,
       public navParams: NavParams) {
-        this.socket = io('http://localhost:5000');
+        this.socket = io('https://diceliar.herokuapp.com/');
       }
 
   ionViewDidLoad() {

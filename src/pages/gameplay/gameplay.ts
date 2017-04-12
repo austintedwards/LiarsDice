@@ -63,7 +63,7 @@ export class GamePlayPage {
     public appCtrl: App,
     public alertCtrl: AlertController,
     public gamedata: Gamedata) {
-    this.socket = io('http://localhost:5000');
+    this.socket = io('https://diceliar.herokuapp.com/');
     this.socket.on('send bid', (bid, playerBid) => {
 
       this.checkedBid++

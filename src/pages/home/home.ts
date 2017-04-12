@@ -23,7 +23,7 @@ export class HomePage {
     public modalCtrl: ModalController,
     public gamedata: Gamedata,
     public appCtrl: App) {
-      this.socket = io('http://localhost:5000');
+      this.socket = io('https://diceliar.herokuapp.com/');
 
   }
   newGame() {
