@@ -16,30 +16,30 @@
 
 <ion-item no-lines [ngSwitch] = "playerUp">
   <ion-item no-lines  *ngSwitchCase = "playernum">
-      <button class = "bidcard" ion-button block >
+      <ion-card class = "bidcard" >
         Make Bid
-      </button>
-  <button class = "bid"  ion-button  round (click)="makeBid(1)">
+      </ion-card>
+  <button class = "bid"  round (click)="makeBid(1)">
     1
   </button>
-  <button class = "bid"  ion-button round (click)="makeBid(2)">
+  <button class = "bid"  round (click)="makeBid(2)">
     2
   </button>
-  <button class = "bid"  ion-button round (click)="makeBid(3)">
+  <button class = "bid"  round (click)="makeBid(3)">
     3
   </button>
-  <button class = "bid"  ion-button round (click)="makeBid(4)">
+  <button class = "bid"  round (click)="makeBid(4)">
     4
   </button>
-  <button class = "bid"  ion-button  round (click)="makeBid(5)">
+  <button class = "bid"   round (click)="makeBid(5)">
     5
   </button>
-  <button class = "bid"  ion-button  round (click)="makeBid(6)">
+  <button class = "bid"  round (click)="makeBid(6)">
     6
   </button>
-      <button *ngIf = "bid" color = "danger" class ="bullshit" ion-button block (click)="bullShit()">
+      <ion-card *ngIf = "bid" color = "danger" class ="bullshit"  (click)="bullShit()">
         Bullshit
-      </button>
+      </ion-card>
   </ion-item>
   <ion-card-header *ngSwitchDefault class="player{{playerUp}}">
     It is {{playerNameUp}}'s turn.
@@ -51,8 +51,12 @@
 <ion-item no-lines>
   <ion-card *ngIf = "markYou" class ="markYou">
     You have {{playerMarks}} marks
+    <!-- <ion-item no-lines *ngPlural="value">
+    <ng-template *ngPluralCase="=1">You have {{playerMarks}} mark</ng-template>
+    <ng-template *ngPluralCase="other"></ng-template>
+    </ion-item > -->
   </ion-card>
-    <button *ngIf = "rollButton"  color = "light" class ="newRoll" ion-button block (click)="newRoll()">
+    <button *ngIf = "rollButton"  color = "light" class ="newRoll" block (click)="newRoll()">
       New Roll!
     </button>
     <ion-card *ngIf = "youOut" class ="youOut">

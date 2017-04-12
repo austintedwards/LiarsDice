@@ -62,6 +62,7 @@ export class GamePlayPage {
     this.socket.on('send bid', (bid, playerBid) => {
       this.bid = bid
       this.playerBid = playerBid
+      console.log(bid,playerBid)
       this.checkBid(bid, playerBid)
     })
     this.socket.on('you marked', (playerNum) => {
@@ -90,14 +91,15 @@ export class GamePlayPage {
       // this.appCtrl.getRootNav().push(DiceRollPage,{ game: this.game, player: this.player, groupNum: this.players.length, youUp:this.youUp });
       if(!this.dontHit){
         this.dontHit=true;
+        this.youRolled = true;
         this.appCtrl.getRootNav().pop()
       }
     })
     this.socket.on('player rolled', (data, game) => {
       this.array.push(data)
       this.game = game
+      this.players = this.game.players
       this.dicecheck = this.game.totalDice
-
     })
 
     this.socket.on('out of game', (playerNum) => {
@@ -135,51 +137,23 @@ export class GamePlayPage {
       }
       })
     })
-    this.socket.on('main menu',()=>{
-      console.log("main menu")
-      this.backToStart()
-      })
   }
 
   ionViewDidLoad() {
-    this.bullButton = true;
-    this.outHit = false;
-    console.log(this.navCtrl)
-    this.markYou = false;
-    this.rollButton = false;
-    this.phrase = this.navParams.data.phrase
-    if (this.playerMarks<5 ||!this.playerMarks){
-    this.gamedata.getGame(this.phrase)
-      .then((data) => {
-        this.data = data
-        if (this.playernum === 1) {
-          if (this.data.totalDice.length > 0) {
-            this.dicecheck = this.data.totalDice
-          }
-        }
-      })
-    }
-    //may need to change this!
-    this.game = this.navParams.data.game
-    this.players = this.game.players
-    this.player = this.navParams.data.player
-    this.dice = this.navParams.data.dice
-    this.groupSize = this.players.length
-    for (var i = 0; i < this.players.length; i++) {
-      if (this.players[i].name === this.player) {
-        this.playernum = this.players[i].playerNum
-      }
-    }
-    this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum, game:this.game});
-    this.youUp =this.navParams.data.youUp
-    console.log("players",this.players)
-    console.log(this.youUp)
-    if (!this.youUp){
-        this.playerUp = this.players[0].playerNum
-    }else{
-      this.playerUp = this.youUp
-    }
-    this.playerShow(this.playerUp)
+    var playerRoll = this.navParams.data.playerRoll
+    this.dice=playerRoll.roll
+    this.playernum = this.navParams.data.playernum
+    this.phrase = playerRoll.phrase
+    this.gamedata.addRoll(playerRoll)
+    .then((data)=>{
+      this.game=data
+      this.bullButton = true;
+      this.players = this.game.players
+      this.dicecheck = this.game.totalDice
+      this.playerUp=this.game.playerUp
+      this.playerShow(this.playerUp)
+      this.socket.emit('player rolled', { page: this.phrase, playerNum: this.playernum, game:this.game});
+    })
   }
 
   playerShow(playerUp) {
@@ -340,31 +314,19 @@ export class GamePlayPage {
   newRoll() {
     if (!this.youOut){
       if (!this.play) {
-        if(this.playerUp ===this.playernum){
-          this.youUp =this.playernum
-          if (this.youUp===0)
-          {this.youUp=this.players[0].playerNum}
-        }else{
-          this.youUp = this.playernum
-          if (this.players.length<this.youUp)
-          {  this.youUp=this.players[0].playerNum}
-        }
+        console.log("imup",this.playernum)
+        this.gamedata.playerUp(this.game,this.phrase,this.playernum)
         this.socket.emit('new roll', { page: this.phrase, playerNum: this.playernum, youUp:this.youUp });
       }
-      // this.navCtrl.pop();
     }else{
       this.youDone()
     }
-
   }
-
 
 
   youDone(){
     this.appCtrl.getRootNav().push(YouDonePage);
   }
-  backToStart(){
-    // this.appCtrl.getRootNav().popToRoot()
-  }
+
 
 }

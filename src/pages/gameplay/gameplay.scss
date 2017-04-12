@@ -1,14 +1,17 @@
 .bid{
   background-color: #c4d6b0;
-  margin-top: 10%;
-  margin: 4%;
+  margin: 1.5%;
   font-family: 'Righteous', cursive;
+  font-size: 170%;
+  border-radius: 100px;
 }
 .bidcard{
   background-color: #c4d6b0;
   margin-top: 10%;
   font-family: 'Righteous', cursive;
   font-size: 200%;
+  text-align: center;
+  border-radius: 100px;
 }
 .diceGifs{
   width:33.2%;
@@ -16,7 +19,6 @@
 .markYou{
   font-size: 200%;
   background-color: #a34f4e;
-  margin-top: 10%;
   font-family: 'Righteous', cursive;
   border-radius: 100px;
   text-align: center;
@@ -29,14 +31,6 @@
   border-radius: 10px;
   text-align: center;
 }
-.newRoll{
-  font-size: 200%;
-  background-color: #ffe6c3;
-  margin-top: 10%;
-  font-family: 'Righteous', cursive;
-  border-radius: 100px;
-  text-align: center;
-}
 .bidgiven{
   font-size: 200%;
   color: #ffe8c4;
@@ -44,30 +38,37 @@
   margin-top: 10%;
   font-family: 'Righteous', cursive;
 }
-
 .bullshit{
   font-size: 200%;
   background-color: #a34f4e;
-  display: block;
-  margin-left: auto;
-  margin-right: auto ;
+  text-align: center;
   margin-top: 10%;
-  padding: 15%;
-  font-family: 'Righteous', cursive;
-}
-.player1{
+  padding: 5%;
   border-radius: 100px;
   font-family: 'Righteous', cursive;
-  font-size: 200%;
+}
+.newRoll{
+  font-size: 250%;
+  background-color: #ffe6c3;
+  display: block;
+  margin: auto;
+  margin-top: 10%;
+  font-family: 'Righteous', cursive;
+  border-radius: 20px;
+  text-align: center;
+}
+.player1{
+  border-radius: 50px;
+  font-family: 'Righteous', cursive;
+  font-size: 175%;
   text-align: center;
   margin-top: 5%;
-
   background-color: #c4d6b0;
 }
 .player2{
   border-radius: 100px;
   font-family: 'Righteous', cursive;
-  font-size: 200%;
+  font-size: 175%;
   text-align: center;
   background-color: #9dbbae;
   margin-top: 5%;
@@ -76,7 +77,7 @@
 .player3{
   border-radius: 100px;
   font-family: 'Righteous', cursive;
-  font-size: 200%;
+  font-size: 175%;
   text-align: center;
   background-color: #577998;
   margin-top: 5%;
@@ -85,18 +86,9 @@
 .player4{
   border-radius: 100px;
   font-family: 'Righteous', cursive;
-  font-size: 200%;
+  font-size: 175%;
   text-align: center;
   background-color: #c4b2bc;
   margin-top: 5%;
 
-}
-
-.di{
-  background-color: #ffe8c4;
-  border-radius: 100px;
-  font-family: 'Righteous', cursive;
-  font-size: 200%;
-  text-align: center;
-  margin-top: 5%;
 }

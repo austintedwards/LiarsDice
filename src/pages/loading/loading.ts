@@ -20,7 +20,6 @@ export class LoadingPage {
   phrase: any;
   socket: any;
   player: any;
-  screenplay = [];
   play: any;
   playernum: any;
   playedIt:any;
@@ -41,7 +40,7 @@ export class LoadingPage {
     this.socket.on('start game', (play, playerNum, otherPlayers) => {
       this.gamedata.gameSize(this.game, this.phrase, otherPlayers)
         .then((data) => {
-          this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, groupNum: this.players.length });
+          this.appCtrl.getRootNav().push(DiceRollPage, { game: this.game, player: this.player, playernum: this.playernum });
         })
     })
   }
@@ -49,10 +48,17 @@ export class LoadingPage {
   ionViewDidLoad() {
     this.player = this.navParams.data.player
     this.phrase = this.navParams.data.phrase
+    console.log(this.player)
     this.gamedata.getPlayers(this.phrase)
       .then((data) => {
         this.game = data;
         this.players = this.game.players;
+        for (var i = 0; i < this.players.length; i++) {
+          if (this.players[i].name === this.player) {
+            this.playernum = this.players[i].playerNum
+          }
+        }
+        console.log(this.playernum)
         if(!this.playedIt){
           this.socket.emit('players', { player: this.player, page: this.phrase });
         }
@@ -64,11 +70,6 @@ export class LoadingPage {
       subTitle: 'Please wait for other players to join.',
       buttons: ['OK']
     });
-    for (var i = 0; i < this.players.length; i++) {
-      if (this.players[i].name === this.player) {
-        this.playernum = this.players[i].playerNum
-      }
-    }
     var otherPlayers = this.game.players.length
     if (otherPlayers > 1) {
       this.socket.emit('start game', { play: "play", page: this.phrase, playerNum: this.playernum, otherPlayers: otherPlayers });

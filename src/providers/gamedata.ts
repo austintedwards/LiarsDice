@@ -138,6 +138,18 @@ gameSize(game,phrase,players){
     })
 }
 
+playerUp(game,phrase,playernum){
+  return new Promise(resolve=>{
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    this.http.put('http://localhost:5000/v1/api/game/'+phrase+"/playerUp/"+playernum, JSON.stringify(game),{headers: headers})
+    .subscribe((data)=>{
+      this.data=data.json()
+      resolve(this.data)
+    })
+    })
+}
+
 
 
 }

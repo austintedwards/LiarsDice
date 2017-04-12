@@ -37,25 +37,19 @@ export class DiceRollPage {
     public appCtrl: App
     ) {
       this.socket = io('http://localhost:5000');
-
     }
 
   ionViewDidLoad() {
-    this.workWithThis.push(1)
-    console.log("work with this", this.workWithThis)
-    this.youRolled = false;
+    this.youRolled = true;
     this.game = this.navParams.data.game
-    this.player = this.navParams.data.player
-    this.groupSize= this.navParams.data.groupNum
-    this.playersRolled = 0
     this.players = this.game.players
+    this.playerNum = this.navParams.data.playernum
     if(this.navParams.data.youUp){
       this.youUp =this.navParams.data.youUp
     }
   }
 
   rollDice(){
-    this.youRolled = true;
     let dice = []
     for (var i =0; i<5; i++){
       dice.push(Math.floor(Math.random()*6)+1)
@@ -64,26 +58,6 @@ export class DiceRollPage {
       phrase: this.game.passphrase,
       roll: dice
     };
-
-    for (var i = 0; i < this.players.length; i++) {
-      if (this.players[i].name === this.player) {
-        this.playerNum = this.players[i].playerNum
-      }
-    }
-    console.log("working")
-    this.testArr.push(1)
-    console.log("testing", this.testArr)
-    // if(this.testArr.length===this.workWithThis.length)
-    this.gamedata.addRoll(playerRoll)
-    .then((data)=>{
-      this.game=data
-      console.log("happens now")
-      this.phrase = playerRoll.phrase
-      this.appCtrl.getRootNav().push(GamePlayPage,{game:this.game, player:this.player, dice:dice, phrase:this.phrase, dicecheck:this.dicecheck, youUp:this.youUp});
-    })
-
-
-
-
+    this.appCtrl.getRootNav().push(GamePlayPage,{playerRoll:playerRoll, playernum:this.playerNum});
   }
 }
