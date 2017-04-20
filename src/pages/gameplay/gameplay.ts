@@ -204,7 +204,7 @@ export class GamePlayPage {
       buttons: ['OK']
     });
     if (this.dicecheck.length>0) {
-      alert.setTitle("Quanity of " + num);
+      alert.setTitle("Dice face " + num);
       for (var i = 1; i < 21; i++) {
         var j = i.toString()
         alert.addInput({
@@ -224,19 +224,19 @@ export class GamePlayPage {
           if (!this.bid) {
             this.bid = currentBid
             this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
-          } else if (currentBid.quanity <= this.bid.quanity) {
-            let quant = this.alertCtrl.create({
-              subTitle: 'Bid needs to include a higher quanity',
-              buttons: ['OK']
-            });
-            quant.present();
-          } else if (currentBid.quanity === this.bid.quanity && currentBid.di <= this.bid.di) {
+          }else if (currentBid.quanity === this.bid.quanity && currentBid.di <= this.bid.di) {
             let quantNum = this.alertCtrl.create({
               subTitle: 'If the di face number is lower, the bid needs a greater quanity',
               buttons: ['OK']
             });
             quantNum.present();
-          } else {
+          } else if (currentBid.quanity < this.bid.quanity) {
+            let quant = this.alertCtrl.create({
+              subTitle: 'Bid needs to include a higher quanity',
+              buttons: ['OK']
+            });
+            quant.present();
+          }  else {
             this.bid = currentBid
             this.socket.emit('send bid', { bid: this.bid, page: this.phrase, player: this.playernum });
           }
